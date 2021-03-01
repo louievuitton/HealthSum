@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "978867545811",
+    "firebase_url": "https://healthsum-f7b8f-default-rtdb.firebaseio.com",
+    "project_id": "healthsum-f7b8f",
+    "storage_bucket": "healthsum-f7b8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978867545811:android:2a8e6c9572d09628f4d626",
+        "android_client_info": {
+          "package_name": "com.stevenlouie.healthsum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978867545811-i7lh6rr484n3qeki0git872legdaovhg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stevenlouie.healthsum",
+            "certificate_hash": "32704389a1e5edd982e3a920d57fc8b871af4155"
+          }
+        },
+        {
+          "client_id": "978867545811-svg6512reeh3om1dm89te43pn0dft3qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-VF9lkNx6CpD2RbKV8zfLIaQrmhRaOPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978867545811-svg6512reeh3om1dm89te43pn0dft3qk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
