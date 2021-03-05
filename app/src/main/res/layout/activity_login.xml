@@ -10,7 +10,7 @@
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/green">
+        android:background="@color/green5">
 
         <TextView
             android:id="@+id/textView1"
@@ -31,7 +31,7 @@
             android:layout_marginLeft="25dp"
             android:fontFamily="sans-serif"
             android:text="Sign in to continue!"
-            android:textColor="#DFD6D6"
+            android:textColor="#717171"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -46,6 +46,16 @@
             android:paddingLeft="30dp"
             android:paddingBottom="30dp"
             android:paddingTop="25dp">
+
+            <TextView
+                android:id="@+id/invalidLoginWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/emailWarning"
+                android:text="Incorrect email or password. Please try again."
+                android:textColor="@color/red"
+                android:textSize="15sp"
+                android:visibility="invisible"/>
 
             <TextView
                 android:id="@+id/emailWarning"

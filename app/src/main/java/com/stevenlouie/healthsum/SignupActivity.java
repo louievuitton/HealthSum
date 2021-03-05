@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +60,7 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                Toast.makeText(SignupActivity.this, "Successfully signed up.", Toast.LENGTH_SHORT).show();
                                 HashMap<String, Object> map = new HashMap<>();
                                 map.put("stepGoal", 0);
                                 map.put("calorieGoal", 0);
@@ -83,43 +85,44 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean validateData() {
+        boolean valid = true;
         if (editName.getText().toString().equals("")) {
             nameWarning.setText("Please enter a valid name.");
             nameWarning.setVisibility(View.VISIBLE);
-            editName.setBackgroundTintList(getColorStateList(R.color.red));
-            return false;
+            valid = false;
         }
 
         if (editEmail.getText().toString().equals("")) {
             emailWarning.setText("Please enter a valid email.");
             emailWarning.setVisibility(View.VISIBLE);
-            editEmail.setBackgroundTintList(getColorStateList(R.color.red));
-            return false;
+            valid = false;
         }
 
         if (editPassword.getText().toString().equals("")) {
             passwordWarning.setText("Please enter a valid password.");
             passwordWarning.setVisibility(View.VISIBLE);
-            editPassword.setBackgroundTintList(getColorStateList(R.color.red));
-            return false;
+            valid = false;
         }
 
         String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if (!Pattern.compile(emailRegex).matcher(editEmail.getText().toString()).matches()) {
             emailWarning.setText("Please enter a valid email.");
             emailWarning.setVisibility(View.VISIBLE);
-            editEmail.setBackgroundTintList(getColorStateList(R.color.red));
-            return false;
+            valid = false;
         }
 
         String passwordRegex = "^[a-zA-Z0-9]{8,}$";
         if (!Pattern.compile(passwordRegex).matcher(editPassword.getText().toString()).matches()) {
             passwordWarning.setText("Password cannot contain special characters and must have at least 8 characters");
             passwordWarning.setVisibility(View.VISIBLE);
-            editPassword.setBackgroundTintList(getColorStateList(R.color.red));
-            return false;
+            valid = false;
         }
 
-        return true;
+        if (!valid) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

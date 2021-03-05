@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_bar"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/chartsFragment"
+        android:label="fragment_charts"
+        tools:layout="@layout/fragment_charts" />
+    <fragment
+        android:id="@+id/setGoalsFragment"
+        android:label="fragment_set_goals"
+        tools:layout="@layout/fragment_set_goals" />
+    <fragment
+        android:id="@+id/weightInFragment"
+        android:label="fragment_weight_in"
+        tools:layout="@layout/fragment_weight_in" />
+</navigation>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SetGoalsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/setGoalsLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stepsWarning"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="50dp"
+            android:text="Warning"
+            android:textColor="@color/red"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/stepsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="50dp"
+            android:text="Steps"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/stepsEditText"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="130dp"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:hint="0"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/caloriesWarning"
+            android:layout_below="@id/stepsTextView"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:text="Warning"
+            android:textColor="@color/red"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/caloriesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stepsTextView"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:text="Calories"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/caloriesEditText"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/stepsEditText"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="130dp"
+            android:gravity="right"
+            android:hint="0"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/setGoalsButton"
+            android:layout_below="@+id/caloriesTextView"
+            android:layout_marginTop="35dp"
+            android:layout_centerHorizontal="true"
+            android:text="Set"
+            android:textColor="@color/white"
+            android:background="@drawable/round_button"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/setGoalsLayout">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/feet_icon"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="40dp"
+            android:src="@mipmap/feet_icon"/>
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/stepsText"
+            android:layout_toRightOf="@id/feet_icon"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="75dp"
+            android:text="An average of 10,000 steps a day to stay healthy for adults."/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/calories_icon"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="40dp"
+            android:layout_below="@+id/feet_icon"
+            android:src="@mipmap/calories_icon"/>
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/caloriesText"
+            android:layout_below="@id/stepsText"
+            android:layout_toRightOf="@id/calories_icon"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="65dp"
+            android:text="The recommended daily calorie intake is 2,000 calories a day for women and 2,500 calories a day for men."/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

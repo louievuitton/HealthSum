@@ -28,7 +28,7 @@
         android:text="@string/login"
         android:textSize="17sp"
         android:textAllCaps="false"
-        android:textColor="@color/green"
+        android:textColor="@color/green5"
         android:background="@drawable/outlined_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

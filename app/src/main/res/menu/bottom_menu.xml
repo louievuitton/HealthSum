@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:enabled="true"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/setGoalsFragment"
+        android:enabled="true"
+        android:title="Goals"
+        android:icon="@drawable/ic_setgoals"/>
+    <item
+        android:id="@+id/weightInFragment"
+        android:enabled="true"
+        android:title="Weigh-in"
+        android:icon="@drawable/ic_weighin"/>
+    <item
+        android:id="@+id/chartsFragment"
+        android:enabled="true"
+        android:title="Charts"
+        android:icon="@drawable/ic_charts"/>
+</menu>
