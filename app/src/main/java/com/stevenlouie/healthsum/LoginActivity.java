@@ -55,15 +55,16 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateData()) {
+//                if (validateData()) {
                     emailWarning.setVisibility(View.INVISIBLE);
                     passwordWarning.setVisibility(View.INVISIBLE);
 
-                    auth.signInWithEmailAndPassword(editEmail.getText().toString(), editPassword.getText().toString()).addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
+                    auth.signInWithEmailAndPassword("johndoe@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("date", "Mar-05-2021");
                             startActivity(intent);
                             finish();
                         }
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                             invalidLoginWarning.setVisibility(View.VISIBLE);
                         }
                     });
-                }
+//                }
             }
         });
     }

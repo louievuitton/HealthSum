@@ -27,6 +27,7 @@ public class SetGoalsFragment extends Fragment {
     private Button setGoalsBtn;
     private FirebaseAuth auth;
     private FirebaseDatabase database;
+    private String date;
 
     public SetGoalsFragment() {
         // Required empty public constructor
@@ -35,6 +36,12 @@ public class SetGoalsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            date = bundle.getString("date");
+        }
+
         View view = inflater.inflate(R.layout.fragment_set_goals, container, false);
 
         auth = FirebaseAuth.getInstance();
@@ -61,7 +68,7 @@ public class SetGoalsFragment extends Fragment {
                     map.put("setSteps", Integer.valueOf(stepsEditText.getText().toString()));
                     map.put("setCalories", Integer.valueOf(caloriesEditText.getText().toString()));
 
-                    database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child("Mar-05-2021").updateChildren(map);
+                    database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
                     Toast.makeText(getActivity(), "Successfully set goals", Toast.LENGTH_SHORT).show();
                 }
             }

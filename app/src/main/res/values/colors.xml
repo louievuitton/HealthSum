@@ -19,4 +19,5 @@
     <color name="fragmentBackground">#61D6D1D1</color>
     <color name="secondaryText">#A8A5A5</color>
     <color name="cancelBtn">#CFCFCF</color>
+    <color name="mealActivityBackGrnd">#E1E1E1</color>
 </resources>
