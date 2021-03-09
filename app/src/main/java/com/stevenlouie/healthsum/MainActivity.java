@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
         final Bundle bundle = new Bundle();
         bundle.putString("date", date);
 
-
-
         Fragment startFragment = new HomeFragment();
         startFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, startFragment).commit();

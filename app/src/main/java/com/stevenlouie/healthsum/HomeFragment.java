@@ -1,5 +1,7 @@
 package com.stevenlouie.healthsum;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,11 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -26,6 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class HomeFragment extends Fragment {
 
     private LinearLayout mealsLayout;
@@ -37,7 +46,13 @@ public class HomeFragment extends Fragment {
     private TextView fab_text;
     private ScrollView scrollView;
     private CardView breakfastCardView, lunchCardView, dinnerCardView, activityCardView;
+    private Button datepicker;
     private String date;
+    private DatePickerDialog datePickerDialog;
+    private int selectedYear;
+    private int selectedMonth;
+    private int selectedDayOfMonth;
+    private Calendar calendar;
     private FirebaseAuth auth;
     private DatabaseReference database;
 
@@ -68,20 +83,90 @@ public class HomeFragment extends Fragment {
         breakfastCardView = view.findViewById(R.id.breakfast_cardview);
         lunchCardView = view.findViewById(R.id.lunch_cardview);
         dinnerCardView = view.findViewById(R.id.dinner_cardview);
+        datepicker = view.findViewById(R.id.datepicker);
+
+        final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+        final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+//        date = timeStamp.format(calendar.getTime());
+        if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
+            datepicker.setText("Today");
+        }
+        else {
+            String dom = date.substring(3, 5);
+            if (dom.charAt(0) == '0') {
+                dom = dom.substring(1);
+            }
+            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + ", " + dom);
+        }
 
         auth = FirebaseAuth.getInstance();
         String userId = auth.getCurrentUser().getUid();
-        database = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child(date);
+        database = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
         fetchData();
+
+        calendar = Calendar.getInstance();
+        selectedYear = calendar.get(Calendar.YEAR);
+        selectedMonth = calendar.get(Calendar.MONTH);
+        selectedDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        datepicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        selectedYear = year;
+                        selectedMonth = month;
+                        selectedDayOfMonth = dayOfMonth;
+
+//                        SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+                        date = timeStamp.format(calendar.getTime());
+                        if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
+                            datepicker.setText("Today");
+                        }
+                        else {
+//                            SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+                            datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
+                        }
+
+                        fetchData();
+                    }
+                }, selectedYear, selectedMonth, selectedDayOfMonth);
+                datePickerDialog.show();
+            }
+        });
 
         breakfastCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), BreakfastActivity.class);
-                intent.putExtra("date", date);
-                intent.putExtra("goalsSet", true);
-                startActivity(intent);
+                database.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @SuppressLint("ResourceType")
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Intent intent = new Intent(getActivity(), BreakfastActivity.class);
+                        intent.putExtra("date", date);
+                        if (dataSnapshot.hasChild("breakfast")) {
+                            intent.putExtra("breakfastSet", true);
+                        }
+                        else {
+                            intent.putExtra("breakfastSet", false);
+                        }
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+//                Intent intent = new Intent(getActivity(), BreakfastActivity.class);
+//                intent.putExtra("date", date);
+//                intent.putExtra("breakfastSet", true);
+//                startActivity(intent);
             }
         });
 
@@ -147,36 +232,59 @@ public class HomeFragment extends Fragment {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child("setCalories").getValue().toString().equals("0")) {
-                    totalCaloriesLeft.setText(dataSnapshot.child("setCalories").getValue().toString());
+                if (dataSnapshot.hasChild(date)) {
+                    database.child(date).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (!dataSnapshot.child("setCalories").getValue().toString().equals("0")) {
+                                mealsLayout.setVisibility(View.VISIBLE);
+                                noDataLayout.setVisibility(View.GONE);
+                                totalCaloriesLeft.setText(dataSnapshot.child("setCalories").getValue().toString());
 
-                    if (dataSnapshot.hasChild("totalCalories")) {
-                        int totalCalories = 0;
-                        for (DataSnapshot snapshot: dataSnapshot.child("totalCalories").getChildren()) {
-                            totalCalories += Integer.valueOf(snapshot.getValue().toString());
+                                if (dataSnapshot.hasChild("totalCalories")) {
+                                    int totalCalories = 0;
+                                    for (DataSnapshot snapshot: dataSnapshot.child("totalCalories").getChildren()) {
+                                        totalCalories += Integer.valueOf(snapshot.getValue().toString());
+                                    }
+
+                                    int totalCarbs = 0;
+                                    for (DataSnapshot snapshot: dataSnapshot.child("totalCarbs").getChildren()) {
+                                        totalCarbs += Integer.valueOf(snapshot.getValue().toString());
+                                    }
+
+                                    int totalFat = 0;
+                                    for (DataSnapshot snapshot: dataSnapshot.child("totalFat").getChildren()) {
+                                        totalFat += Integer.valueOf(snapshot.getValue().toString());
+                                    }
+
+                                    int totalProtein = 0;
+                                    for (DataSnapshot snapshot: dataSnapshot.child("totalProtein").getChildren()) {
+                                        totalProtein += Integer.valueOf(snapshot.getValue().toString());
+                                    }
+                                    totalCaloriesGained.setText(String.valueOf(totalCalories));
+                                    totalCarbsConsumed.setText(String.valueOf(totalCarbs) + "g");
+                                    totalFatConsumed.setText(String.valueOf(totalFat) + "g");
+                                    totalProteinConsumed.setText(String.valueOf(totalProtein) + "g");
+                                }
+                            }
+                            else {
+                                mealsLayout.setVisibility(View.GONE);
+                                noDataLayout.setVisibility(View.VISIBLE);
+                            }
                         }
 
-                        int totalCarbs = 0;
-                        for (DataSnapshot snapshot: dataSnapshot.child("totalCarbs").getChildren()) {
-                            totalCarbs += Integer.valueOf(snapshot.getValue().toString());
-                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        int totalFat = 0;
-                        for (DataSnapshot snapshot: dataSnapshot.child("totalFat").getChildren()) {
-                            totalFat += Integer.valueOf(snapshot.getValue().toString());
                         }
-
-                        int totalProtein = 0;
-                        for (DataSnapshot snapshot: dataSnapshot.child("totalProtein").getChildren()) {
-                            totalProtein += Integer.valueOf(snapshot.getValue().toString());
-                        }
-                        totalCaloriesGained.setText(String.valueOf(totalCalories));
-                        totalCarbsConsumed.setText(String.valueOf(totalCarbs) + "g");
-                        totalFatConsumed.setText(String.valueOf(totalFat) + "g");
-                        totalProteinConsumed.setText(String.valueOf(totalProtein) + "g");
-                    }
+                    });
                 }
                 else {
+                    totalCaloriesLeft.setText("0");
+                    totalCaloriesGained.setText("0");
+                    totalCarbsConsumed.setText("0g");
+                    totalFatConsumed.setText("0g");
+                    totalProteinConsumed.setText("0g");
                     mealsLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.VISIBLE);
                 }
@@ -187,6 +295,49 @@ public class HomeFragment extends Fragment {
 
             }
         });
+//        database.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (!dataSnapshot.child("setCalories").getValue().toString().equals("0")) {
+//                    totalCaloriesLeft.setText(dataSnapshot.child("setCalories").getValue().toString());
+//
+//                    if (dataSnapshot.hasChild("totalCalories")) {
+//                        int totalCalories = 0;
+//                        for (DataSnapshot snapshot: dataSnapshot.child("totalCalories").getChildren()) {
+//                            totalCalories += Integer.valueOf(snapshot.getValue().toString());
+//                        }
+//
+//                        int totalCarbs = 0;
+//                        for (DataSnapshot snapshot: dataSnapshot.child("totalCarbs").getChildren()) {
+//                            totalCarbs += Integer.valueOf(snapshot.getValue().toString());
+//                        }
+//
+//                        int totalFat = 0;
+//                        for (DataSnapshot snapshot: dataSnapshot.child("totalFat").getChildren()) {
+//                            totalFat += Integer.valueOf(snapshot.getValue().toString());
+//                        }
+//
+//                        int totalProtein = 0;
+//                        for (DataSnapshot snapshot: dataSnapshot.child("totalProtein").getChildren()) {
+//                            totalProtein += Integer.valueOf(snapshot.getValue().toString());
+//                        }
+//                        totalCaloriesGained.setText(String.valueOf(totalCalories));
+//                        totalCarbsConsumed.setText(String.valueOf(totalCarbs) + "g");
+//                        totalFatConsumed.setText(String.valueOf(totalFat) + "g");
+//                        totalProteinConsumed.setText(String.valueOf(totalProtein) + "g");
+//                    }
+//                }
+//                else {
+//                    mealsLayout.setVisibility(View.GONE);
+//                    noDataLayout.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 //        if (mealsLayout.getVisibility() == View.VISIBLE) {
 //            database.addValueEventListener(new ValueEventListener() {

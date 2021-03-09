@@ -15,7 +15,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView emailWarning, passwordWarning, invalidLoginWarning, signupBtn;
     private EditText editEmail, editPassword;
     private Button loginBtn;
-
+    private Calendar calendar;
     private FirebaseAuth auth;
 
     @Override
@@ -59,12 +66,31 @@ public class LoginActivity extends AppCompatActivity {
                     emailWarning.setVisibility(View.INVISIBLE);
                     passwordWarning.setVisibility(View.INVISIBLE);
 
+                    calendar = Calendar.getInstance();
+                    SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+                    final String date = timeStamp.format(calendar.getTime());
                     auth.signInWithEmailAndPassword("johndoe@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (!dataSnapshot.hasChild("03-05-2021")) {
+                                        HashMap<String, Object> map = new HashMap<>();
+                                        map.put("setCalories", 0);
+                                        map.put("setSteps", 0);
+                                        FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child("03-05-2021").updateChildren(map);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("date", "Mar-05-2021");
+                            intent.putExtra("date", "03-05-2021");
                             startActivity(intent);
                             finish();
                         }

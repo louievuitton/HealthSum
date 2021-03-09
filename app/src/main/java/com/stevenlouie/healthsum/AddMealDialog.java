@@ -116,12 +116,11 @@ public class AddMealDialog extends AppCompatDialogFragment {
                             if (dataSnapshot.child("totalProtein").hasChild(mealType)) {
                                 totalProtein = Integer.valueOf(dataSnapshot.child("totalProtein").child(mealType).getValue().toString());
                             }
-
-                            database.child("totalCalories").child(mealType).setValue(totalCalories+100);
-                            database.child("totalCarbs").child(mealType).setValue(totalCarbs+84);
-                            database.child("totalFat").child(mealType).setValue(totalFat+24);
-                            database.child("totalProtein").child(mealType).setValue(totalProtein+19);
                         }
+                        database.child("totalCalories").child(mealType).setValue(totalCalories+100);
+                        database.child("totalCarbs").child(mealType).setValue(totalCarbs+84);
+                        database.child("totalFat").child(mealType).setValue(totalFat+24);
+                        database.child("totalProtein").child(mealType).setValue(totalProtein+19);
                     }
 
                     @Override

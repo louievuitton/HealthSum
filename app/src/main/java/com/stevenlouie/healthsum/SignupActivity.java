@@ -64,9 +64,9 @@ public class SignupActivity extends AppCompatActivity {
                                 HashMap<String, Object> map = new HashMap<>();
                                 map.put("setCalories", 0);
                                 map.put("setSteps", 0);
-                                FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child("Mar-05-2021").updateChildren(map);
+                                FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child("03/05/2021").updateChildren(map);
                                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                intent.putExtra("date", "Mar-05-2021");
+                                intent.putExtra("date", "03-05-2021");
                                 startActivity(intent);
                                 finish();
                             }

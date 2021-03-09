@@ -6,16 +6,44 @@
     tools:context=".SetGoalsFragment">
 
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/setGoalsLayout">
+        android:padding="13dp"
+        android:background="@color/green5">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Set Goals"
+            android:textSize="17sp"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/setGoalsLayout"
+        android:layout_below="@id/header">
+
+        <Button
+            android:id="@+id/datepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today"
+            android:textAllCaps="false"
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/stepsWarning"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="50dp"
+            android:layout_below="@id/datepicker"
             android:text="Warning"
             android:textColor="@color/red"
             android:visibility="invisible"/>
@@ -24,8 +52,8 @@
             android:id="@+id/stepsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:layout_marginLeft="50dp"
+            android:layout_below="@id/stepsWarning"
             android:text="Steps"
             android:textSize="30sp" />
 
@@ -33,9 +61,9 @@
             android:id="@+id/stepsEditText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:layout_marginRight="130dp"
             android:layout_alignParentEnd="true"
+            android:layout_below="@id/stepsWarning"
             android:gravity="right"
             android:hint="0"
             android:textSize="20sp" />
