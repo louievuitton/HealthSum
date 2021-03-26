@@ -40,6 +40,7 @@ public class SetGoalsFragment extends Fragment {
     private int selectedMonth;
     private int selectedDayOfMonth;
     private Calendar calendar;
+    private String parentActivity;
 
     public SetGoalsFragment() {
         // Required empty public constructor
@@ -52,6 +53,7 @@ public class SetGoalsFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             date = bundle.getString("date");
+            parentActivity = bundle.getString("activity");
         }
 
         View view = inflater.inflate(R.layout.fragment_set_goals, container, false);
@@ -59,34 +61,47 @@ public class SetGoalsFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-        stepsEditText = view.findViewById(R.id.stepsEditText);
+//        stepsEditText = view.findViewById(R.id.stepsEditText);
         caloriesEditText = view.findViewById(R.id.caloriesEditText);
-        stepsWarning = view.findViewById(R.id.stepsWarning);
+//        stepsWarning = view.findViewById(R.id.stepsWarning);
         caloriesWarning = view.findViewById(R.id.caloriesWarning);
         setGoalsBtn = view.findViewById(R.id.setGoalsButton);
         datepicker = view.findViewById(R.id.datepicker);
 
+        final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+        final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+        if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
+            datepicker.setText("Today");
+        }
+        else {
+            String dom = date.substring(3, 5);
+            if (dom.charAt(0) == '0') {
+                dom = dom.substring(1);
+            }
+            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + ", " + dom);
+        }
+
         calendar = Calendar.getInstance();
-        selectedYear = calendar.get(Calendar.YEAR);
-        selectedMonth = calendar.get(Calendar.MONTH);
-        selectedDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        selectedYear = Integer.valueOf(date.substring(6));
+        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
         
         setGoalsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateGoals()) {
-                    stepsWarning.setVisibility(View.INVISIBLE);
+//                    stepsWarning.setVisibility(View.INVISIBLE);
                     caloriesWarning.setVisibility(View.INVISIBLE);
 
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(stepsEditText.getWindowToken(), 0);
+//                    imm.hideSoftInputFromWindow(stepsEditText.getWindowToken(), 0);
                     imm.hideSoftInputFromWindow(caloriesEditText.getWindowToken(), 0);
 
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("setSteps", Integer.valueOf(stepsEditText.getText().toString()));
+//                    map.put("setSteps", Integer.valueOf(stepsEditText.getText().toString()));
                     map.put("setCalories", Integer.valueOf(caloriesEditText.getText().toString()));
 
-                    database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
+                    database.getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
                     Toast.makeText(getActivity(), "Successfully set goals", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -105,13 +120,17 @@ public class SetGoalsFragment extends Fragment {
                         selectedMonth = month;
                         selectedDayOfMonth = dayOfMonth;
 
-                        SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
                         date = timeStamp.format(calendar.getTime());
+                        if (parentActivity.equals("main")) {
+                            ((MainActivity) getActivity()).setDate(date);
+                        }
+                        else if (parentActivity.equals("breakfast")) {
+                            ((BreakfastActivity) getActivity()).setDate(date);
+                        }
                         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
                             datepicker.setText("Today");
                         }
                         else {
-                            SimpleDateFormat month_date = new SimpleDateFormat("MMM");
                             datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
                         }
                     }
@@ -125,14 +144,14 @@ public class SetGoalsFragment extends Fragment {
 
     private boolean validateGoals() {
         boolean valid = true;
-        if (stepsEditText.getText().toString().equals("")) {
-            stepsWarning.setText("Steps count cannot be empty");
-            stepsWarning.setVisibility(View.VISIBLE);
-            valid = false;
-        }
-        else {
-            stepsWarning.setVisibility(View.INVISIBLE);
-        }
+//        if (stepsEditText.getText().toString().equals("")) {
+//            stepsWarning.setText("Steps count cannot be empty");
+//            stepsWarning.setVisibility(View.VISIBLE);
+//            valid = false;
+//        }
+//        else {
+//            stepsWarning.setVisibility(View.INVISIBLE);
+//        }
 
         if (caloriesEditText.getText().toString().equals("")) {
             caloriesWarning.setText("Calories count cannot be empty");
@@ -145,13 +164,13 @@ public class SetGoalsFragment extends Fragment {
 
         if (valid) {
             String regex = "^[0-9]+$";
-            if (!Pattern.compile(regex).matcher(stepsEditText.getText().toString()).matches() && !stepsEditText.getText().toString().equals("")) {
-                stepsWarning.setText("Steps count can only be numbers");
-                stepsWarning.setVisibility(View.VISIBLE);
-                valid = false;
-            } else {
-                stepsWarning.setVisibility(View.INVISIBLE);
-            }
+//            if (!Pattern.compile(regex).matcher(stepsEditText.getText().toString()).matches() && !stepsEditText.getText().toString().equals("")) {
+//                stepsWarning.setText("Steps count can only be numbers");
+//                stepsWarning.setVisibility(View.VISIBLE);
+//                valid = false;
+//            } else {
+//                stepsWarning.setVisibility(View.INVISIBLE);
+//            }
 
             if (!Pattern.compile(regex).matcher(caloriesEditText.getText().toString()).matches() && !caloriesEditText.getText().toString().equals("")) {
                 caloriesWarning.setText("Calories count can only be numbers");

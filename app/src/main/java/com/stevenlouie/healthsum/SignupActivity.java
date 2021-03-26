@@ -61,10 +61,16 @@ public class SignupActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(SignupActivity.this, "Successfully signed up.", Toast.LENGTH_SHORT).show();
+                                HashMap<String, Object> map1 = new HashMap<>();
+                                map1.put("gender", "male");
+                                map1.put("age", 24);
+                                map1.put("height", 167);
+                                FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).updateChildren(map1);
                                 HashMap<String, Object> map = new HashMap<>();
                                 map.put("setCalories", 0);
-                                map.put("setSteps", 0);
-                                FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child("03/05/2021").updateChildren(map);
+//                                map.put("setSteps", 0);
+                                map.put("caloriesBurned", 0);
+                                FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("03/05/2021").updateChildren(map);
                                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                                 intent.putExtra("date", "03-05-2021");
                                 startActivity(intent);

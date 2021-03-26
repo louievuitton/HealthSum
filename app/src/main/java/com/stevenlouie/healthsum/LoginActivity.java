@@ -73,14 +73,15 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
-                            FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (!dataSnapshot.hasChild("03-05-2021")) {
                                         HashMap<String, Object> map = new HashMap<>();
                                         map.put("setCalories", 0);
-                                        map.put("setSteps", 0);
-                                        FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child("03-05-2021").updateChildren(map);
+//                                        map.put("setSteps", 0);
+                                        map.put("caloriesBurned", 0);
+                                        FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("03-05-2021").updateChildren(map);
                                     }
                                 }
 

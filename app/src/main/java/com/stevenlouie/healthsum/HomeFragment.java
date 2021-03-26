@@ -1,17 +1,13 @@
 package com.stevenlouie.healthsum;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,15 +33,14 @@ import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
 
-    private LinearLayout mealsLayout;
+    private LinearLayout activityLayout;
     private RelativeLayout noDataLayout;
-    private TextView totalCaloriesLeft, totalCaloriesGained, totalCaloriesBurned, totalProteinConsumed, totalCarbsConsumed, totalFatConsumed;
+    private TextView totalCaloriesLeft, totalCaloriesGained, totalCaloriesBurned, totalProteinConsumed, totalCarbsConsumed, totalFatConsumed, breakfast_details, exerciseDetails, fab_text;
     private ProgressBar caloriesProgressBar;
     private LinearLayout fab_full;
     private FloatingActionButton fab;
-    private TextView fab_text;
     private ScrollView scrollView;
-    private CardView breakfastCardView, lunchCardView, dinnerCardView, activityCardView;
+    private CardView breakfastCardView, lunchCardView, dinnerCardView, exerciseCardView;
     private Button datepicker;
     private String date;
     private DatePickerDialog datePickerDialog;
@@ -55,6 +50,7 @@ public class HomeFragment extends Fragment {
     private Calendar calendar;
     private FirebaseAuth auth;
     private DatabaseReference database;
+    private String parentActivity;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,10 +63,11 @@ public class HomeFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             date = bundle.getString("date");
+            parentActivity = bundle.getString("activity");
         }
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mealsLayout = view.findViewById(R.id.mealsLayout);
+        activityLayout = view.findViewById(R.id.activityLayout);
         noDataLayout = view.findViewById(R.id.noDataLayout);
         totalCaloriesLeft = view.findViewById(R.id.caloriesConsumed);
         totalCaloriesGained = view.findViewById(R.id.totalCaloriesGained);
@@ -83,11 +80,13 @@ public class HomeFragment extends Fragment {
         breakfastCardView = view.findViewById(R.id.breakfast_cardview);
         lunchCardView = view.findViewById(R.id.lunch_cardview);
         dinnerCardView = view.findViewById(R.id.dinner_cardview);
+        exerciseCardView = view.findViewById(R.id.exerciseCardView);
         datepicker = view.findViewById(R.id.datepicker);
+        breakfast_details = view.findViewById(R.id.breakfast_details);
+        exerciseDetails = view.findViewById(R.id.exerciseDetails);
 
         final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
         final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
-//        date = timeStamp.format(calendar.getTime());
         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
             datepicker.setText("Today");
         }
@@ -101,14 +100,14 @@ public class HomeFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         String userId = auth.getCurrentUser().getUid();
-        database = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(userId);
 
         fetchData();
 
         calendar = Calendar.getInstance();
-        selectedYear = calendar.get(Calendar.YEAR);
-        selectedMonth = calendar.get(Calendar.MONTH);
-        selectedDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        selectedYear = Integer.valueOf(date.substring(6));
+        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
 
         datepicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,13 +122,17 @@ public class HomeFragment extends Fragment {
                         selectedMonth = month;
                         selectedDayOfMonth = dayOfMonth;
 
-//                        SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
                         date = timeStamp.format(calendar.getTime());
+                        if (parentActivity.equals("main")) {
+                            ((MainActivity) getActivity()).setDate(date);
+                        }
+                        else if (parentActivity.equals("breakfast")) {
+                            ((BreakfastActivity) getActivity()).setDate(date);
+                        }
                         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
                             datepicker.setText("Today");
                         }
                         else {
-//                            SimpleDateFormat month_date = new SimpleDateFormat("MMM");
                             datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
                         }
 
@@ -143,30 +146,30 @@ public class HomeFragment extends Fragment {
         breakfastCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                database.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @SuppressLint("ResourceType")
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Intent intent = new Intent(getActivity(), BreakfastActivity.class);
-                        intent.putExtra("date", date);
-                        if (dataSnapshot.hasChild("breakfast")) {
-                            intent.putExtra("breakfastSet", true);
-                        }
-                        else {
-                            intent.putExtra("breakfastSet", false);
-                        }
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-//                Intent intent = new Intent(getActivity(), BreakfastActivity.class);
-//                intent.putExtra("date", date);
-//                intent.putExtra("breakfastSet", true);
-//                startActivity(intent);
+//                database.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @SuppressLint("ResourceType")
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        Intent intent = new Intent(getActivity(), BreakfastActivity.class);
+//                        intent.putExtra("date", date);
+//                        if (dataSnapshot.hasChild("breakfast")) {
+//                            intent.putExtra("breakfastSet", true);
+//                        }
+//                        else {
+//                            intent.putExtra("breakfastSet", false);
+//                        }
+//                        startActivity(intent);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+                Intent intent = new Intent(getActivity(), BreakfastActivity.class);
+                intent.putExtra("date", date);
+                intent.putExtra("breakfastSet", true);
+                startActivity(intent);
             }
         });
 
@@ -186,6 +189,16 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DinnerActivity.class);
                 intent.putExtra("date", date);
                 intent.putExtra("goalsSet", false);
+                startActivity(intent);
+            }
+        });
+
+        exerciseCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ExerciseActivity.class);
+                intent.putExtra("date", date);
+                intent.putExtra("exerciseSet", true);
                 startActivity(intent);
             }
         });
@@ -223,13 +236,13 @@ public class HomeFragment extends Fragment {
     private void openDialog() {
         Bundle bundle = new Bundle();
         bundle.putString("date", date);
-        AddMealDialog dialog = new AddMealDialog();
+        AddActivityDialog dialog = new AddActivityDialog();
         dialog.setArguments(bundle);
-        dialog.show(getActivity().getSupportFragmentManager(), "Add Dialog");
+        dialog.show(getActivity().getSupportFragmentManager(), "Add Activity Dialog");
     }
 
     private void fetchData() {
-        database.addValueEventListener(new ValueEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(date)) {
@@ -237,9 +250,11 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.child("setCalories").getValue().toString().equals("0")) {
-                                mealsLayout.setVisibility(View.VISIBLE);
+                                activityLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
+                                fab_full.setVisibility(View.VISIBLE);
                                 totalCaloriesLeft.setText(dataSnapshot.child("setCalories").getValue().toString());
+                                totalCaloriesBurned.setText(dataSnapshot.child("caloriesBurned").getValue().toString());
 
                                 if (dataSnapshot.hasChild("totalCalories")) {
                                     int totalCalories = 0;
@@ -268,8 +283,37 @@ public class HomeFragment extends Fragment {
                                 }
                             }
                             else {
-                                mealsLayout.setVisibility(View.GONE);
+                                activityLayout.setVisibility(View.GONE);
                                 noDataLayout.setVisibility(View.VISIBLE);
+                                fab_full.setVisibility(View.GONE);
+                            }
+
+                            if (dataSnapshot.hasChild("breakfast")) {
+                                String breakfastMeals = "";
+                                for (DataSnapshot snapshot: dataSnapshot.child("breakfast").getChildren()) {
+                                    breakfastMeals += snapshot.child("meal").getValue().toString() + ", ";
+                                }
+                                if (breakfastMeals.substring(breakfastMeals.length()-2).equals(", ")) {
+                                    breakfastMeals = breakfastMeals.substring(0, breakfastMeals.length()-2);
+                                }
+                                if (breakfastMeals.length() > 40) {
+                                    breakfastMeals = breakfastMeals.substring(0, 40) + "...";
+                                }
+                                breakfast_details.setText(breakfastMeals);
+                            }
+
+                            if (dataSnapshot.hasChild("exercises")) {
+                                String exercises = "";
+                                for (DataSnapshot snapshot: dataSnapshot.child("exercises").getChildren()) {
+                                    exercises += snapshot.child("exercise").getValue().toString() + ", ";
+                                }
+                                if (exercises.substring(exercises.length()-2).equals(", ")) {
+                                    exercises = exercises.substring(0, exercises.length()-2);
+                                }
+                                if (exercises.length() > 40) {
+                                    exercises = exercises.substring(0, 40) + "...";
+                                }
+                                exerciseDetails.setText(exercises);
                             }
                         }
 
@@ -285,8 +329,9 @@ public class HomeFragment extends Fragment {
                     totalCarbsConsumed.setText("0g");
                     totalFatConsumed.setText("0g");
                     totalProteinConsumed.setText("0g");
-                    mealsLayout.setVisibility(View.GONE);
+                    activityLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.VISIBLE);
+                    fab_full.setVisibility(View.GONE);
                 }
             }
 

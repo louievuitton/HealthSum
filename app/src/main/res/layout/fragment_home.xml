@@ -219,11 +219,16 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_below="@id/statisticsLayout"
+                android:padding="5dp"
                 android:text="Today"
-                android:textAllCaps="false"/>
+                android:textColor="@color/datepicker"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:drawableLeft="@drawable/ic_calendar"
+                android:background="@null"/>
 
             <LinearLayout
-                android:id="@+id/mealsLayout"
+                android:id="@+id/activityLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -273,8 +278,7 @@
                             android:layout_below="@id/breakfast_label"
                             android:layout_marginLeft="16dp"
                             android:layout_toRightOf="@id/breakfast_icon"
-                            android:text="Pancakes..."
-                            android:textColor="@color/secondaryText" />
+                            android:textColor="@color/secondaryText"/>
 
                         <Button
                             android:layout_width="30dp"
@@ -402,7 +406,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:id="@+id/activity_cardview"
+                    android:id="@+id/exerciseCardView"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="15dp"
@@ -420,28 +424,27 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="13dp"
-                            android:src="@drawable/ic_breakfast" />
+                            android:src="@drawable/ic_exercise" />
 
                         <TextView
-                            android:id="@+id/activity_label"
+                            android:id="@+id/exerciseLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="5dp"
                             android:layout_toRightOf="@id/activity_icon"
-                            android:text="Activity"
+                            android:text="Exercise"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textAllCaps="true"/>
 
                         <TextView
-                            android:id="@+id/activity_details"
+                            android:id="@+id/exerciseDetails"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/activity_label"
+                            android:layout_below="@id/exerciseLabel"
                             android:layout_marginLeft="16dp"
                             android:layout_toRightOf="@id/activity_icon"
-                            android:text="Pancakes..."
                             android:textColor="@color/secondaryText" />
 
                         <Button
@@ -490,7 +493,8 @@
         android:orientation="horizontal"
         android:elevation="15dp"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:visibility="gone">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

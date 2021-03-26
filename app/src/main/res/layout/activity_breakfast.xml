@@ -46,33 +46,42 @@
                 <RelativeLayout
                     android:id="@+id/statisticsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="190dp"
-                    android:background="@color/darkerOrange">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:paddingBottom="10dp"
+                    android:background="@drawable/elevated_layout">
 
                     <Button
                         android:id="@+id/datepicker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:padding="5dp"
                         android:text="Today"
+                        android:textColor="@color/datepicker"
+                        android:textSize="16sp"
                         android:textAllCaps="false"
-                        android:layout_centerHorizontal="true"/>
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:background="@null"/>
 
-                    <ProgressBar
-                        android:id="@+id/caloriesProgressBar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="12dp"
-                        android:indeterminate="false"
-                        android:max="100"
-                        android:progress="100"
-                        android:progressDrawable="@drawable/circular_progress_bar"
-                        android:layout_centerInParent="true"/>
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/caloriesProgressBar"-->
+<!--                        style="?android:attr/progressBarStyleHorizontal"-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="100dp"-->
+<!--                        android:layout_below="@id/datepicker"-->
+<!--                        android:indeterminate="false"-->
+<!--                        android:max="100"-->
+<!--                        android:progress="100"-->
+<!--                        android:progressDrawable="@drawable/circular_progress_bar"-->
+<!--                        android:layout_centerInParent="true"/>-->
 
                     <TextView
                         android:id="@+id/caloriesConsumed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/datepicker"
+                        android:layout_marginTop="8dp"
                         android:text="0"
                         android:textColor="@color/blue"
                         android:textSize="25sp"
@@ -82,13 +91,14 @@
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:text="Calories Consumed"
                         android:textAllCaps="true"
-                        android:textColor="@color/white"
+                        android:textColor="@color/datepicker"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:layout_centerInParent="true"
-                        android:layout_below="@id/caloriesProgressBar"/>
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/caloriesConsumed"/>
 
                 </RelativeLayout>
 

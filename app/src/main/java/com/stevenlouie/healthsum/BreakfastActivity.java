@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,7 +57,7 @@ public class BreakfastActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_breakfast);
-
+        
         Intent intent = getIntent();
         if (intent != null) {
             date = intent.getStringExtra("date");
@@ -67,7 +68,6 @@ public class BreakfastActivity extends AppCompatActivity {
         statisticsLayout = findViewById(R.id.statisticsLayout);
         listTextView = findViewById(R.id.listTextView);
         textView3 = findViewById(R.id.textView3);
-        caloriesProgressBar = findViewById(R.id.caloriesProgressBar);
         caloriesConsumed = findViewById(R.id.caloriesConsumed);
         adapter = new MealRecViewAdapter(this);
         breakfastRecView = findViewById(R.id.breakfastRecView);
@@ -79,6 +79,7 @@ public class BreakfastActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 final Bundle bundle = new Bundle();
                 bundle.putString("date", date);
+                bundle.putString("activity", "breakfast");
 
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
@@ -103,19 +104,31 @@ public class BreakfastActivity extends AppCompatActivity {
 //                        selectedFragment.setArguments(bundle);
                         break;
                 }
-
 //                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
 //                frameLayout.removeAllViews();
-                getSupportFragmentManager().beginTransaction().replace(R.id.breakfastContainer, selectedFragment).commit();
                 breakfastContents.setVisibility(View.GONE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.breakfastContainer, selectedFragment).commit();
                 return true;
             }
         });
 
+        final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+        final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+        if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
+            datepicker.setText("Today");
+        }
+        else {
+            String dom = date.substring(3, 5);
+            if (dom.charAt(0) == '0') {
+                dom = dom.substring(1);
+            }
+            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + ", " + dom);
+        }
+
         calendar = Calendar.getInstance();
-        selectedYear = calendar.get(Calendar.YEAR);
-        selectedMonth = calendar.get(Calendar.MONTH);
-        selectedDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        selectedYear = Integer.valueOf(date.substring(6));
+        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
 
         datepicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,13 +143,11 @@ public class BreakfastActivity extends AppCompatActivity {
                         selectedMonth = month;
                         selectedDayOfMonth = dayOfMonth;
 
-                        SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
                         date = timeStamp.format(calendar.getTime());
                         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
                             datepicker.setText("Today");
                         }
                         else {
-                            SimpleDateFormat month_date = new SimpleDateFormat("MMM");
                             datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
                         }
 
@@ -163,32 +174,18 @@ public class BreakfastActivity extends AppCompatActivity {
             }
         });
 
-//        FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.hasChild(date)) {
-//                    breakfastSet = true;
-//                }
-//                else {
-//                    breakfastSet = false;
-//                }
-//                fetchData();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
         fetchData();
+
+//        if (adapter.getItemCount() == 0) {
+//            breakfastSet = false;
+//            fetchData();
+//        }
     }
 
     private void fetchData() {
         if (!breakfastSet) {
-            textView3.setVisibility(View.GONE);
-            caloriesConsumed.setVisibility(View.GONE);
-            caloriesProgressBar.setVisibility(View.GONE);
+//            textView3.setVisibility(View.GONE);
+//            caloriesConsumed.setVisibility(View.GONE);
             breakfastRecView.setVisibility(View.GONE);
             listTextView.setText("You haven't logged any meals yet.\nStart by adding your first meal.");
         }
@@ -196,18 +193,17 @@ public class BreakfastActivity extends AppCompatActivity {
 //            statisticsLayout.setVisibility(View.VISIBLE);
             textView3.setVisibility(View.VISIBLE);
             caloriesConsumed.setVisibility(View.VISIBLE);
-            caloriesProgressBar.setVisibility(View.VISIBLE);
             breakfastRecView.setAdapter(adapter);
             breakfastRecView.setLayoutManager(new LinearLayoutManager(this));
 
             final ArrayList<Meal> list = new ArrayList<>();
 
             auth = FirebaseAuth.getInstance();
-            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child(date);
-            database.addListenerForSingleValueEvent(new ValueEventListener() {
+            final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date);
+            database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.hasChild("breakfast")) {
+                    if (dataSnapshot.hasChild("breakfast")) {
                         caloriesConsumed.setText(dataSnapshot.child("totalCalories").child("breakfast").getValue().toString());
 
                         list.clear();
@@ -217,12 +213,15 @@ public class BreakfastActivity extends AppCompatActivity {
                         if (list.size() != 0) {
                             listTextView.setText("What you had");
                             breakfastRecView.setVisibility(View.VISIBLE);
+                            adapter.setUserId(auth.getCurrentUser().getUid());
+                            adapter.setDate(date);
+                            adapter.setMealType("breakfast");
                             adapter.setMeals(list);
                         }
-//                    }
-//                    else {
-//                        listTextView.setText("You haven't logged any meals yet.\nPlease add your first meal.");
-//                    }
+                    }
+                    else {
+                        listTextView.setText("You haven't logged any meals yet.\nPlease add your first meal.");
+                    }
                 }
 
                 @Override
@@ -234,6 +233,7 @@ public class BreakfastActivity extends AppCompatActivity {
     }
 
     private void initBottomNav() {
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -265,5 +265,9 @@ public class BreakfastActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

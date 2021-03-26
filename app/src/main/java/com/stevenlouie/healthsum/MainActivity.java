@@ -32,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid()).child(date);
+        database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date);
 
         final Bundle bundle = new Bundle();
         bundle.putString("date", date);
+        bundle.putString("activity", "main");
 
         Fragment startFragment = new HomeFragment();
         startFragment.setArguments(bundle);
@@ -46,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.homeFragment:
+                        bundle.putString("date", date);
                         selectedFragment = new HomeFragment();
                         selectedFragment.setArguments(bundle);
                         break;
                     case R.id.setGoalsFragment:
+                        bundle.putString("date", date);
                         selectedFragment = new SetGoalsFragment();
                         selectedFragment.setArguments(bundle);
                         break;
@@ -68,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override

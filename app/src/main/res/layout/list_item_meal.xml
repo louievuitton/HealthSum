@@ -43,6 +43,15 @@
             android:text="150 calories"
             android:textSize="16sp"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="14dp"
+            android:id="@+id/deleteBtn"
+            android:text="Delete"
+            android:textColor="@color/red"/>
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
