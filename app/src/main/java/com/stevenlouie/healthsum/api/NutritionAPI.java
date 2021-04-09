@@ -36,16 +36,21 @@ public class NutritionAPI {
     private int totalFat = 0;
     private int totalProtein = 0;
     private int totalCaloriesBurned = 0;
+    private String gender = "";
+    private double weight = 0;
+    private String height = "";
+    private int age = 0;
 
     public NutritionAPI(Context context) {
         this.context = context;
     }
 
-    public void fetchNutritionData(final String date, final String mealType, String foodName) {
+    public void fetchNutritionData(final String date, final String mealType, String foodName, final int numServings) {
         String url = "https://trackapi.nutritionix.com/v2/natural/nutrients";
         JSONObject obj = new JSONObject();
         try {
             obj.put("query", foodName);
+            obj.put("num_servings", numServings);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -71,11 +76,11 @@ public class NutritionAPI {
                     }
 
                     final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date);
-                    String key = database.push().getKey();
+                    final String key = database.push().getKey();
                     final HashMap<String, Object> map = new HashMap<>();
                     map.put("id", key);
                     map.put("meal", "");
-                    map.put("servings", 1);
+                    map.put("servings", numServings);
                     map.put("calories", 0);
                     map.put("fat", 0);
                     map.put("carbs", 0);
@@ -94,8 +99,8 @@ public class NutritionAPI {
                     database.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            int setCalories = Integer.valueOf(dataSnapshot.child("setCalories").getValue().toString());
-                            database.child("setCalories").setValue(setCalories-((int)map.get("calories")));
+                            int caloriesLeft = Integer.valueOf(dataSnapshot.child("caloriesLeft").getValue().toString());
+                            database.child("caloriesLeft").setValue(caloriesLeft-((int)map.get("calories")));
                             if (dataSnapshot.hasChild("totalCalories")) {
                                 if (dataSnapshot.child("totalCalories").hasChild(mealType)) {
                                     totalCalories = Integer.valueOf(dataSnapshot.child("totalCalories").child(mealType).getValue().toString());
@@ -117,6 +122,7 @@ public class NutritionAPI {
                             database.child("totalCarbs").child(mealType).setValue(totalCarbs+((int) map.get("carbs")));
                             database.child("totalFat").child(mealType).setValue(totalFat+((int) map.get("fat")));
                             database.child("totalProtein").child(mealType).setValue(totalProtein+((int) map.get("protein")));
+                            database.child(mealType).child(key).updateChildren(map);
                         }
 
                         @Override
@@ -125,8 +131,11 @@ public class NutritionAPI {
                         }
                     });
 
-                    database.child(mealType).child(key).updateChildren(map);
-
+//                    database.child("totalCalories").child(mealType).setValue(totalCalories+((int) map.get("calories")));
+//                    database.child("totalCarbs").child(mealType).setValue(totalCarbs+((int) map.get("carbs")));
+//                    database.child("totalFat").child(mealType).setValue(totalFat+((int) map.get("fat")));
+//                    database.child("totalProtein").child(mealType).setValue(totalProtein+((int) map.get("protein")));
+//                    database.child(mealType).child(key).updateChildren(map);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -152,14 +161,122 @@ public class NutritionAPI {
     }
 
     public void fetchExerciseData(final String date, final String exercise) {
+        // fetch user information
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                gender = dataSnapshot.child("gender").getValue().toString();
+                age = Integer.valueOf(dataSnapshot.child("age").getValue().toString());
+//                weight = Double.valueOf(dataSnapshot.child("weight").getValue().toString());
+                height = dataSnapshot.child("height").getValue().toString();
+
+//                double wt = weight*(0.453592);
+                final double ht = (Double.valueOf(height.substring(0,1))*(30.48)) + (Double.valueOf(height.substring(2))*(2.54));
+
+                final ArrayList<Double> wt = new ArrayList<>();
+                db.child("weight").child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                            wt.add(Double.valueOf(snapshot.getValue().toString()));
+                        }
+//                        Toast.makeText(context, "weight: " + wt.get(wt.size()-1), Toast.LENGTH_SHORT).show();
+                        addExercise(date, exercise, gender, age, Math.round(wt.get(wt.size()-1)*(0.453592)), Math.round(ht));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
+                // fetch exercise activity from api and add to firebase
+//                addExercise(date, exercise, gender, age, Math.round(wt), Math.round(ht));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+//        String url = "https://trackapi.nutritionix.com/v2/natural/exercise";
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("query", exercise);
+//            obj.put("gender", "male");
+//            obj.put("weight_kg", 72.5);
+//            obj.put("height_cm", 167.64);
+//            obj.put("age", 30);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+//
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    JSONArray exercises = response.getJSONArray("exercises");
+//                    for (int i = 0; i < exercises.length(); i++) {
+//                        totalCaloriesBurned = ((JSONObject) exercises.get(i)).getInt("nf_calories");
+//                    }
+//
+//                    final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date);
+//                    database.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            int caloriesBurned = Integer.valueOf(dataSnapshot.child("caloriesBurned").getValue().toString());
+//                            database.child("caloriesBurned").setValue(caloriesBurned + totalCaloriesBurned);
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                    String key = database.push().getKey();
+//                    final HashMap<String, Object> map = new HashMap<>();
+//                    map.put("id", key);
+//                    map.put("exercise", exercise);
+//                    map.put("caloriesBurned", totalCaloriesBurned);
+//
+//                    database.child("exercises").child(key).updateChildren(map);
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(context, "Please enter a valid exercise", Toast.LENGTH_LONG).show();
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("x-app-id", "9787a77e");
+//                params.put("x-app-key", "40785cdacf0ad9c162ae95eb2f83aa9d");
+//                return params;
+//            }
+//        };
+//
+//        queue.add(request);
+    }
+
+    private void addExercise(final String date, final String exercise, String g, int a, double w, double h) {
         String url = "https://trackapi.nutritionix.com/v2/natural/exercise";
         JSONObject obj = new JSONObject();
         try {
             obj.put("query", exercise);
-            obj.put("gender", "male");
-            obj.put("weight_kg", 72.5);
-            obj.put("height_cm", 167.64);
-            obj.put("age", 30);
+            obj.put("gender", g);
+            obj.put("weight_kg", w);
+            obj.put("height_cm", h);
+            obj.put("age", a);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -204,7 +321,7 @@ public class NutritionAPI {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Please enter a valid food name", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Please enter a valid exercise", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override

@@ -6,16 +6,15 @@
         android:enabled="true"
         android:title="Home"
         android:icon="@drawable/ic_home"/>
+<!--    <item-->
+<!--        android:id="@+id/setGoalsFragment"-->
+<!--        android:enabled="true"-->
+<!--        android:title="Goals"-->
+<!--        android:icon="@drawable/ic_setgoals"/>-->
     <item
-        android:id="@+id/setGoalsFragment"
+        android:id="@+id/addActivityFragment"
         android:enabled="true"
-        android:title="Goals"
-        android:icon="@drawable/ic_setgoals"/>
-    <item
-        android:id="@+id/weightInFragment"
-        android:enabled="true"
-        android:title="Weigh-in"
-        android:icon="@drawable/ic_weighin"/>
+        android:title=""/>
     <item
         android:id="@+id/chartsFragment"
         android:enabled="true"

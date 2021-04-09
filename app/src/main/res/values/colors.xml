@@ -21,4 +21,5 @@
     <color name="cancelBtn">#CFCFCF</color>
     <color name="mealActivityBackGrnd">#E1E1E1</color>
     <color name="datepicker">#616161</color>
+    <color name="scaleBackground">#2B98D3</color>
 </resources>

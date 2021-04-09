@@ -4,6 +4,10 @@
     <string name="login">Log In</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
     <integer-array name="num_servings">
         <item>1</item>
         <item>2</item>
@@ -11,5 +15,29 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>
+    </integer-array>
+    <integer-array name="height_feet">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </integer-array>
+    <integer-array name="height_inches">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
     </integer-array>
 </resources>

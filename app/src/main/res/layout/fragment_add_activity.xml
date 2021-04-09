@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddActivityFragment">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="13dp"
+        android:background="@color/green5">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Add Activity"
+            android:textSize="17sp"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/datepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_margin="5dp"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+        android:text="Today"
+        android:textColor="@color/datepicker"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:drawableLeft="@drawable/ic_calendar"
+        android:background="@null"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/selectActivityRG"
+        android:layout_below="@id/datepicker"
+        android:layout_marginLeft="25dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mealRB"
+            android:text="Meal"
+            android:checked="true"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/exerciseRB"
+            android:text="Exercise"/>
+
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/activityLayout"
+        android:layout_below="@+id/selectActivityRG">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addExerciseLayout"
+            android:padding="25dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/exerciseHeader"
+                android:text="Enter your workout"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/exerciseHeader"
+                android:id="@+id/exerciseWarning"
+                android:text="Warning"
+                android:textColor="@color/red"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/exerciseWarning"
+                android:id="@+id/exerciseEditText"
+                android:hint="e.g. ran 3 miles"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addMealLayout"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/selectMealTextView"
+                android:layout_marginTop="14dp"
+                android:text="Select where you want to add your meal"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioGroup"
+                android:layout_below="@id/selectMealTextView"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="25dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/breakfastRB"
+                    android:text="Breakfast"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lunchRB"
+                    android:text="Lunch"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dinnerRB"
+                    android:text="Dinner"/>
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/foodTextView"
+                android:layout_below="@+id/radioGroup"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="24dp"
+                android:text="Food to add"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/foodWarning"
+                android:layout_below="@+id/foodTextView"
+                android:layout_marginLeft="24dp"
+                android:text="Warning"
+                android:textColor="@color/red"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
+            <EditText
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/foodWarning"
+                android:layout_marginLeft="24dp"
+                android:id="@+id/mealEditText"
+                android:hint="e.g. 1 bowl of oatmeal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mealEditText"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="24dp"
+                android:id="@+id/servingsTextView"
+                android:text="Number of servings"
+                android:textSize="20sp"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mealEditText"
+                android:layout_toRightOf="@id/servingsTextView"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="16dp"
+                android:id="@+id/num_servings_spinner"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activityLayout"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/addActivityBtn"
+        android:text="Add"
+        android:textColor="@color/white"
+        android:background="@drawable/add_activity_button"/>
+
+<!--    <Button-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/activityLayout"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginRight="70dp"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:id="@+id/cancelBtn"-->
+<!--        android:text="Cancel"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:background="@drawable/cancel_activity_button"/>-->
+
+</RelativeLayout>

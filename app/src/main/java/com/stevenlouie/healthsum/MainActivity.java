@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
+    private LinearLayout fab_full;
     private String date;
     private FirebaseAuth auth;
     private DatabaseReference database;
@@ -31,12 +33,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        fab_full = findViewById(R.id.fab_full);
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date);
 
         final Bundle bundle = new Bundle();
         bundle.putString("date", date);
         bundle.putString("activity", "main");
+
+        fab_full.setClickable(false);
 
         Fragment startFragment = new HomeFragment();
         startFragment.setArguments(bundle);
@@ -51,16 +56,18 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new HomeFragment();
                         selectedFragment.setArguments(bundle);
                         break;
-                    case R.id.setGoalsFragment:
+//                    case R.id.setGoalsFragment:
+//                        bundle.putString("date", date);
+//                        selectedFragment = new SetGoalsFragment();
+//                        selectedFragment.setArguments(bundle);
+//                        break;
+                    case R.id.addActivityFragment:
                         bundle.putString("date", date);
-                        selectedFragment = new SetGoalsFragment();
-                        selectedFragment.setArguments(bundle);
-                        break;
-                    case R.id.weightInFragment:
-                        selectedFragment = new WeightInFragment();
+                        selectedFragment = new AddActivityFragment();
                         selectedFragment.setArguments(bundle);
                         break;
                     case R.id.chartsFragment:
+                        bundle.putString("date", date);
                         selectedFragment = new ChartsFragment();
                         selectedFragment.setArguments(bundle);
                         break;

@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +36,7 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout activityLayout;
     private RelativeLayout noDataLayout;
-    private TextView totalCaloriesLeft, totalCaloriesGained, totalCaloriesBurned, totalProteinConsumed, totalCarbsConsumed, totalFatConsumed, breakfast_details, exerciseDetails, fab_text;
+    private TextView totalCaloriesLeft, totalCaloriesGained, totalCaloriesBurned, totalProteinConsumed, totalCarbsConsumed, totalFatConsumed, breakfast_details, breakfast_calories, exerciseDetails, exerciseCaloriesBurned, fab_text;
     private ProgressBar caloriesProgressBar;
     private LinearLayout fab_full;
     private FloatingActionButton fab;
@@ -51,6 +52,8 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth auth;
     private DatabaseReference database;
     private String parentActivity;
+    private boolean goalsSet = false;
+    private int totalCalories = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -84,6 +87,8 @@ public class HomeFragment extends Fragment {
         datepicker = view.findViewById(R.id.datepicker);
         breakfast_details = view.findViewById(R.id.breakfast_details);
         exerciseDetails = view.findViewById(R.id.exerciseDetails);
+        breakfast_calories = view.findViewById(R.id.breakfast_calories);
+        exerciseCaloriesBurned = view.findViewById(R.id.exerciseCaloriesBurned);
 
         final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
         final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
@@ -168,7 +173,7 @@ public class HomeFragment extends Fragment {
 //                });
                 Intent intent = new Intent(getActivity(), BreakfastActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("breakfastSet", true);
+//                intent.putExtra("breakfastSet", true);
                 startActivity(intent);
             }
         });
@@ -198,7 +203,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ExerciseActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("exerciseSet", true);
+//                intent.putExtra("exerciseSet", true);
                 startActivity(intent);
             }
         });
@@ -236,25 +241,33 @@ public class HomeFragment extends Fragment {
     private void openDialog() {
         Bundle bundle = new Bundle();
         bundle.putString("date", date);
-        AddActivityDialog dialog = new AddActivityDialog();
+        SetGoalsDialog dialog = new SetGoalsDialog();
         dialog.setArguments(bundle);
-        dialog.show(getActivity().getSupportFragmentManager(), "Add Activity Dialog");
+        dialog.show(getActivity().getSupportFragmentManager(), "Set Goals Dialog");
     }
 
     private void fetchData() {
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        breakfast_details.setText("");
+        breakfast_calories.setText("");
+        exerciseDetails.setText("");
+        exerciseCaloriesBurned.setText("");
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(date)) {
+                    goalsSet = true;
                     database.child(date).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (!dataSnapshot.child("setCalories").getValue().toString().equals("0")) {
+                            if (!dataSnapshot.child("calorieGoal").getValue().toString().equals("0")) {
                                 activityLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
                                 fab_full.setVisibility(View.VISIBLE);
-                                totalCaloriesLeft.setText(dataSnapshot.child("setCalories").getValue().toString());
+                                totalCalories = Integer.valueOf(dataSnapshot.child("calorieGoal").getValue().toString());
+                                totalCaloriesLeft.setText(dataSnapshot.child("caloriesLeft").getValue().toString());
                                 totalCaloriesBurned.setText(dataSnapshot.child("caloriesBurned").getValue().toString());
+                                caloriesProgressBar.setMax(totalCalories);
+                                caloriesProgressBar.setProgress(totalCalories - Integer.valueOf(totalCaloriesLeft.getText().toString()));
 
                                 if (dataSnapshot.hasChild("totalCalories")) {
                                     int totalCalories = 0;
@@ -280,40 +293,49 @@ public class HomeFragment extends Fragment {
                                     totalCarbsConsumed.setText(String.valueOf(totalCarbs) + "g");
                                     totalFatConsumed.setText(String.valueOf(totalFat) + "g");
                                     totalProteinConsumed.setText(String.valueOf(totalProtein) + "g");
+
+                                    if (dataSnapshot.hasChild("breakfast")) {
+                                        String breakfastMeals = "";
+                                        for (DataSnapshot snapshot: dataSnapshot.child("breakfast").getChildren()) {
+                                            breakfastMeals += snapshot.child("meal").getValue().toString() + ", ";
+                                        }
+                                        if (breakfastMeals.substring(breakfastMeals.length()-2).equals(", ")) {
+                                            breakfastMeals = breakfastMeals.substring(0, breakfastMeals.length()-2);
+                                        }
+                                        if (breakfastMeals.length() > 40) {
+                                            breakfastMeals = breakfastMeals.substring(0, 40) + "...";
+                                        }
+                                        breakfast_details.setText(breakfastMeals);
+                                        breakfast_calories.setText("Total Calories: " + dataSnapshot.child("totalCalories").child("breakfast").getValue().toString());
+                                    }
+                                }
+                                else {
+                                    totalCaloriesGained.setText("0");
+                                    totalCarbsConsumed.setText("0g");
+                                    totalFatConsumed.setText("0g");
+                                    totalProteinConsumed.setText("0g");
+                                }
+
+                                if (dataSnapshot.hasChild("exercises")) {
+                                    String exercises = "";
+                                    for (DataSnapshot snapshot: dataSnapshot.child("exercises").getChildren()) {
+                                        exercises += snapshot.child("exercise").getValue().toString() + ", ";
+                                    }
+                                    if (exercises.substring(exercises.length()-2).equals(", ")) {
+                                        exercises = exercises.substring(0, exercises.length()-2);
+                                    }
+                                    if (exercises.length() > 40) {
+                                        exercises = exercises.substring(0, 40) + "...";
+                                    }
+                                    exerciseDetails.setText(exercises);
+                                    exerciseCaloriesBurned.setText("Calories Burned: " + dataSnapshot.child("caloriesBurned").getValue().toString());
                                 }
                             }
                             else {
                                 activityLayout.setVisibility(View.GONE);
                                 noDataLayout.setVisibility(View.VISIBLE);
-                                fab_full.setVisibility(View.GONE);
-                            }
-
-                            if (dataSnapshot.hasChild("breakfast")) {
-                                String breakfastMeals = "";
-                                for (DataSnapshot snapshot: dataSnapshot.child("breakfast").getChildren()) {
-                                    breakfastMeals += snapshot.child("meal").getValue().toString() + ", ";
-                                }
-                                if (breakfastMeals.substring(breakfastMeals.length()-2).equals(", ")) {
-                                    breakfastMeals = breakfastMeals.substring(0, breakfastMeals.length()-2);
-                                }
-                                if (breakfastMeals.length() > 40) {
-                                    breakfastMeals = breakfastMeals.substring(0, 40) + "...";
-                                }
-                                breakfast_details.setText(breakfastMeals);
-                            }
-
-                            if (dataSnapshot.hasChild("exercises")) {
-                                String exercises = "";
-                                for (DataSnapshot snapshot: dataSnapshot.child("exercises").getChildren()) {
-                                    exercises += snapshot.child("exercise").getValue().toString() + ", ";
-                                }
-                                if (exercises.substring(exercises.length()-2).equals(", ")) {
-                                    exercises = exercises.substring(0, exercises.length()-2);
-                                }
-                                if (exercises.length() > 40) {
-                                    exercises = exercises.substring(0, 40) + "...";
-                                }
-                                exerciseDetails.setText(exercises);
+                                totalCaloriesBurned.setText(dataSnapshot.child("caloriesBurned").getValue().toString());
+//                                fab_full.setVisibility(View.GONE);
                             }
                         }
 
@@ -324,14 +346,18 @@ public class HomeFragment extends Fragment {
                     });
                 }
                 else {
+                    goalsSet = false;
                     totalCaloriesLeft.setText("0");
                     totalCaloriesGained.setText("0");
                     totalCarbsConsumed.setText("0g");
                     totalFatConsumed.setText("0g");
                     totalProteinConsumed.setText("0g");
+                    totalCaloriesBurned.setText("0");
                     activityLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.VISIBLE);
-                    fab_full.setVisibility(View.GONE);
+                    caloriesProgressBar.setMax(0);
+                    caloriesProgressBar.setProgress(0);
+//                    fab_full.setVisibility(View.GONE);
                 }
             }
 
@@ -421,5 +447,10 @@ public class HomeFragment extends Fragment {
 //                }
 //            });
 //        }
+    }
+
+    private void updateProgressBar() {
+        caloriesProgressBar.setMax(totalCalories);
+        caloriesProgressBar.setProgress(Integer.valueOf(totalCaloriesLeft.getText().toString()));
     }
 }

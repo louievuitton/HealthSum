@@ -10,8 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/breakfastContainer"
-        android:layout_above="@id/bottomNavigationView">
+        android:id="@+id/breakfastContainer">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -51,18 +50,18 @@
                     android:paddingBottom="10dp"
                     android:background="@drawable/elevated_layout">
 
-                    <Button
-                        android:id="@+id/datepicker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:padding="5dp"
-                        android:text="Today"
-                        android:textColor="@color/datepicker"
-                        android:textSize="16sp"
-                        android:textAllCaps="false"
-                        android:drawableLeft="@drawable/ic_calendar"
-                        android:background="@null"/>
+<!--                    <Button-->
+<!--                        android:id="@+id/datepicker"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:padding="5dp"-->
+<!--                        android:text="Today"-->
+<!--                        android:textColor="@color/datepicker"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textAllCaps="false"-->
+<!--                        android:drawableLeft="@drawable/ic_calendar"-->
+<!--                        android:background="@null"/>-->
 
 <!--                    <ProgressBar-->
 <!--                        android:id="@+id/caloriesProgressBar"-->
@@ -85,13 +84,13 @@
                         android:text="0"
                         android:textColor="@color/blue"
                         android:textSize="25sp"
-                        android:layout_centerInParent="true"/>
+                        android:layout_centerHorizontal="true"/>
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="Calories Consumed"
                         android:textAllCaps="true"
                         android:textColor="@color/datepicker"
@@ -135,20 +134,66 @@
 
             </RelativeLayout>
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="25dp"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_add"
+                android:stateListAnimator="@null"
+                app:borderWidth="0dp"
+                app:elevation="15dp"
+                app:rippleColor="@null"
+                app:useCompatPadding="false"
+                android:clickable="true"
+                android:focusable="true"/>
+
         </RelativeLayout>
 
     </FrameLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_menu" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:animateLayoutChanges="true"-->
+<!--        android:id="@+id/fab_full"-->
+<!--        android:background="@drawable/fab_button_expanded"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:elevation="15dp"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        android:visibility="visible">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/fab_text"-->
+<!--            android:paddingStart="0dp"-->
+<!--            android:paddingEnd="20dp"-->
+<!--            android:text="Add"-->
+<!--            android:textColor="@color/darkerOrange"-->
+<!--            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"/>-->
+<!--    </LinearLayout>-->
+
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottomNavigationView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:background="@color/white"-->
+<!--        app:labelVisibilityMode="labeled"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:menu="@menu/bottom_menu" />-->
 
 </RelativeLayout>

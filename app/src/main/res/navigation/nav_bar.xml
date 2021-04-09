@@ -13,12 +13,12 @@
         android:id="@+id/chartsFragment"
         android:label="fragment_charts"
         tools:layout="@layout/fragment_charts" />
+<!--    <fragment-->
+<!--        android:id="@+id/setGoalsFragment"-->
+<!--        android:label="fragment_set_goals"-->
+<!--        tools:layout="@layout/fragment_set_goals" />-->
     <fragment
-        android:id="@+id/setGoalsFragment"
-        android:label="fragment_set_goals"
-        tools:layout="@layout/fragment_set_goals" />
-    <fragment
-        android:id="@+id/weightInFragment"
-        android:label="fragment_weight_in"
-        tools:layout="@layout/fragment_weight_in" />
+        android:id="@+id/addActivityFragment"
+        android:label="fragment_add_activity"
+        tools:layout="@layout/fragment_add_activity" />
 </navigation>

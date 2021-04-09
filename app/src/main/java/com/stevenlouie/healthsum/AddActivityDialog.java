@@ -2,15 +2,20 @@ package com.stevenlouie.healthsum;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,9 +41,11 @@ public class AddActivityDialog extends AppCompatDialogFragment {
     private EditText mealEditText, exerciseEditText;
     private Button addBtn, cancelBtn;
     private RadioGroup radioGroup, selectActivityRG;
+    private Spinner num_servings_spinner;
     private String mealType = "breakfast";
     private String date;
     private String selectedActivity = "meal";
+    private int numServings = 1;
 //    private FirebaseAuth auth;
 //    private int totalCalories = 0;
 //    private int totalCarbs = 0;
@@ -69,9 +76,12 @@ public class AddActivityDialog extends AppCompatDialogFragment {
         cancelBtn = view.findViewById(R.id.cancelBtn);
         radioGroup = view.findViewById(R.id.radioGroup);
         selectActivityRG = view.findViewById(R.id.selectActivityRG);
+        num_servings_spinner = view.findViewById(R.id.num_servings_spinner);
+
         selectActivityRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 switch (checkedId) {
                     case R.id.mealRB:
                         selectedActivity = "meal";
@@ -79,6 +89,7 @@ public class AddActivityDialog extends AppCompatDialogFragment {
                         mealEditText.getText().clear();
                         foodWarning.setVisibility(View.GONE);
                         addMealLayout.setVisibility(View.VISIBLE);
+                        imm.hideSoftInputFromWindow(mealEditText.getWindowToken(), 0);
                         break;
                     case R.id.exerciseRB:
                         selectedActivity = "exercise";
@@ -86,6 +97,7 @@ public class AddActivityDialog extends AppCompatDialogFragment {
                         exerciseEditText.getText().clear();
                         exerciseWarning.setVisibility(View.GONE);
                         addExerciseLayout.setVisibility(View.VISIBLE);
+                        imm.hideSoftInputFromWindow(exerciseEditText.getWindowToken(), 0);
                         break;
                     default:
                         break;
@@ -112,19 +124,39 @@ public class AddActivityDialog extends AppCompatDialogFragment {
             }
         });
 
+        final Integer[] servings_array = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, servings_array);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        num_servings_spinner.setAdapter(adapter);
+        num_servings_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                numServings = (Integer) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // api to get nutrition details
                 if (validateInput()) {
+                    foodWarning.setVisibility(View.GONE);
+                    exerciseWarning.setVisibility(View.GONE);
                     NutritionAPI api = new NutritionAPI(getActivity());
                     if (selectedActivity.equals("meal")) {
-                        foodWarning.setVisibility(View.GONE);
-                        api.fetchNutritionData(date, mealType, mealEditText.getText().toString());
+                        api.fetchNutritionData(date, mealType, mealEditText.getText().toString(), numServings);
+                        mealEditText.getText().clear();
+                        mealEditText.clearFocus();
                     }
                     else if (selectedActivity.equals("exercise")) {
-                        exerciseWarning.setVisibility(View.GONE);
                         api.fetchExerciseData(date, exerciseEditText.getText().toString());
+                        exerciseEditText.getText().clear();
+                        exerciseEditText.clearFocus();
                     }
                     Toast.makeText(getActivity(), "Successfully added activity", Toast.LENGTH_SHORT).show();
                     dismiss();

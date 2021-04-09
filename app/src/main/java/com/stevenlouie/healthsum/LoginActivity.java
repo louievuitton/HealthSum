@@ -69,18 +69,18 @@ public class LoginActivity extends AppCompatActivity {
                     calendar = Calendar.getInstance();
                     SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
                     final String date = timeStamp.format(calendar.getTime());
-                    auth.signInWithEmailAndPassword("johndoe@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
+                    auth.signInWithEmailAndPassword("barney@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
                             FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (!dataSnapshot.hasChild("03-05-2021")) {
                                         HashMap<String, Object> map = new HashMap<>();
-                                        map.put("setCalories", 0);
+                                        map.put("caloriesLeft", 0);
 //                                        map.put("setSteps", 0);
                                         map.put("caloriesBurned", 0);
+                                        map.put("calorieGoal", 0);
                                         FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("03-05-2021").updateChildren(map);
                                     }
                                 }
@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }
                             });
+                            Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra("date", "03-05-2021");
                             startActivity(intent);

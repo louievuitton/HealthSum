@@ -2,9 +2,7 @@ package com.stevenlouie.healthsum;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,11 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +57,7 @@ public class ExerciseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             date = intent.getStringExtra("date");
-            exerciseSet = intent.getBooleanExtra("exerciseSet", false);
+//            exerciseSet = intent.getBooleanExtra("exerciseSet", false);
         }
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -91,12 +87,12 @@ public class ExerciseActivity extends AppCompatActivity {
                         selectedFragment = new HomeFragment();
                         selectedFragment.setArguments(bundle);
                         break;
-                    case R.id.setGoalsFragment:
-                        selectedFragment = new SetGoalsFragment();
-                        selectedFragment.setArguments(bundle);
-                        break;
-                    case R.id.weightInFragment:
-                        selectedFragment = new WeightInFragment();
+//                    case R.id.setGoalsFragment:
+//                        selectedFragment = new SetGoalsFragment();
+//                        selectedFragment.setArguments(bundle);
+//                        break;
+                    case R.id.addActivityFragment:
+                        selectedFragment = new AddActivityFragment();
 //                        selectedFragment.setArguments(bundle);
                         break;
                     case R.id.chartsFragment:
@@ -185,20 +181,17 @@ public class ExerciseActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        if (!exerciseSet) {
-//            textView3.setVisibility(View.GONE);
-//            caloriesConsumed.setVisibility(View.GONE);
-            exerciseRecView.setVisibility(View.GONE);
-//            listTextView.setText("You haven't logged any meals yet.\nStart by adding your first meal.");
-        }
-        else {
+//        if (!exerciseSet) {
+////            textView3.setVisibility(View.GONE);
+////            caloriesConsumed.setVisibility(View.GONE);
+//            exerciseRecView.setVisibility(View.GONE);
+////            listTextView.setText("You haven't logged any meals yet.\nStart by adding your first meal.");
+//        }
+//        else {
 //            statisticsLayout.setVisibility(View.VISIBLE);
 //            textView3.setVisibility(View.VISIBLE);
 //            totalCaloriesBurned.setVisibility(View.VISIBLE);
-            exerciseRecView.setAdapter(adapter);
-            exerciseRecView.setLayoutManager(new LinearLayoutManager(this));
 
-            final ArrayList<Exercise> list = new ArrayList<>();
             final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date);
             database.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -206,11 +199,14 @@ public class ExerciseActivity extends AppCompatActivity {
                     if (dataSnapshot.hasChild("exercises")) {
                         totalCaloriesBurned.setText(dataSnapshot.child("caloriesBurned").getValue().toString());
 
+                        ArrayList<Exercise> list = new ArrayList<>();
                         list.clear();
                         for (DataSnapshot snapshot: dataSnapshot.child("exercises").getChildren()) {
                             list.add(snapshot.getValue(Exercise.class));
                         }
                         if (list.size() != 0) {
+                            exerciseRecView.setAdapter(adapter);
+                            exerciseRecView.setLayoutManager(new LinearLayoutManager(ExerciseActivity.this));
                             listTextView.setText("What you did");
                             exerciseRecView.setVisibility(View.VISIBLE);
                             adapter.setUserId(auth.getCurrentUser().getUid());
@@ -219,7 +215,8 @@ public class ExerciseActivity extends AppCompatActivity {
                         }
                     }
                     else {
-                        listTextView.setText("You haven't logged any meals yet.\nPlease add your first meal.");
+                        exerciseRecView.setVisibility(View.GONE);
+                        listTextView.setText("You haven't logged any exercises yet.\nStart by adding your first exerise.");
                     }
                 }
 
@@ -229,42 +226,42 @@ public class ExerciseActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+//    }
 
-    private void initBottomNav() {
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
-                switch (item.getItemId()) {
-                    case R.id.homeFragment:
-//                        Intent intent = new Intent(BreakfastActivity.this, MainActivity.class);
-//                        intent.putExtra("date", "Mar-05-2021");
-//                        intent.putExtra("fragmentSelected", "home");
-//                        startActivity(intent);
-                        selectedFragment = new HomeFragment();
-                        break;
-                    case R.id.setGoalsFragment:
-                        selectedFragment = new SetGoalsFragment();
-//                        selectedFragment.setArguments(bundle);
-                        break;
-                    case R.id.weightInFragment:
-                        selectedFragment = new WeightInFragment();
-//                        selectedFragment.setArguments(bundle);
-                        break;
-                    case R.id.chartsFragment:
-                        selectedFragment = new ChartsFragment();
-//                        selectedFragment.setArguments(bundle);
-                        break;
-                }
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, selectedFragment).commit();
-
-                return true;
-            }
-        });
-    }
+//    private void initBottomNav() {
+//
+//        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                Fragment selectedFragment = null;
+//                switch (item.getItemId()) {
+//                    case R.id.homeFragment:
+////                        Intent intent = new Intent(BreakfastActivity.this, MainActivity.class);
+////                        intent.putExtra("date", "Mar-05-2021");
+////                        intent.putExtra("fragmentSelected", "home");
+////                        startActivity(intent);
+//                        selectedFragment = new HomeFragment();
+//                        break;
+//                    case R.id.setGoalsFragment:
+//                        selectedFragment = new SetGoalsFragment();
+////                        selectedFragment.setArguments(bundle);
+//                        break;
+//                    case R.id.weightInFragment:
+//                        selectedFragment = new AddActivityFragment();
+////                        selectedFragment.setArguments(bundle);
+//                        break;
+//                    case R.id.chartsFragment:
+//                        selectedFragment = new ChartsFragment();
+////                        selectedFragment.setArguments(bundle);
+//                        break;
+//                }
+//
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, selectedFragment).commit();
+//
+//                return true;
+//            }
+//        });
+//    }
 
     public void setDate(String date) {
         this.date = date;

@@ -32,6 +32,11 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
     private String date;
     private String mealType;
     private String userId;
+    private int totalCalories;
+    private int totalCarbs;
+    private int totalFat;
+    private int totalProtein;
+    private int counter;
 
     public MealRecViewAdapter(Context context) {
         this.context = context;
@@ -52,7 +57,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
             holder.numServings.setText(meals.get(position).getServings() + " serving,");
         }
         else {
-            holder.numServings.setText(meals.get(position).getServings() + " servings, ");
+            holder.numServings.setText(meals.get(position).getServings() + " servings,");
         }
         holder.numCalories.setText(meals.get(position).getCalories() + " calories");
         holder.parent.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +70,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
 //        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
+//                counter = 0;
 ////                Bundle bundle = new Bundle();
 ////                bundle.putString("date", date);
 ////                bundle.putString("id", meals.get(position).getId());
@@ -79,7 +85,6 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
 ////                dialog.show(context.getSupportFragmentManager(), "Delete dialog");
 //
 //                final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(userId).child(date);
-//                Toast.makeText(context, userId + " Deleted", Toast.LENGTH_SHORT).show();
 ////                database.addListenerForSingleValueEvent(new ValueEventListener() {
 ////                    @Override
 ////                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,10 +105,66 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
 ////
 ////                    }
 ////                });
-//                database.child("setCalories").addListenerForSingleValueEvent(new ValueEventListener() {
+////                database.addListenerForSingleValueEvent(new ValueEventListener() {
+////                    @Override
+////                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                        database.child("setCalories").setValue(Integer.valueOf(dataSnapshot.child("setCalories").getValue().toString())+meals.get(position).getCalories());
+////                    }
+////
+////                    @Override
+////                    public void onCancelled(@NonNull DatabaseError databaseError) {
+////
+////                    }
+////                });
+////                if (meals.size() == 1) {
+////                    database.child("totalCalories").child(mealType).getRef().removeValue();
+////                    database.child("totalCarbs").child(mealType).getRef().removeValue();
+////                    database.child("totalFat").child(mealType).getRef().removeValue();
+////                    database.child("totalProtein").child(mealType).getRef().removeValue();
+////                }
+////                else {
+////                    database.addValueEventListener(new ValueEventListener() {
+////                        @Override
+////                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                            totalCalories = Integer.valueOf(dataSnapshot.child("totalCalories").child(mealType).getValue().toString());
+////                            totalCarbs = Integer.valueOf(dataSnapshot.child("totalCarbs").child(mealType).getValue().toString());
+////                            totalFat = Integer.valueOf(dataSnapshot.child("totalFat").child(mealType).getValue().toString());
+////                            totalProtein = Integer.valueOf(dataSnapshot.child("totalProtein").child(mealType).getValue().toString());
+////                        }
+////
+////                        @Override
+////                        public void onCancelled(@NonNull DatabaseError databaseError) {
+////
+////                        }
+////                    });
+////                    database.child("totalCalories").child(mealType).setValue(totalCalories - meals.get(position).getCalories());
+////                    database.child("totalCarbs").child(mealType).setValue(totalCarbs - meals.get(position).getCarbs());
+////                    database.child("totalFat").child(mealType).setValue(totalFat - meals.get(position).getFat());
+////                    database.child("totalProtein").child(mealType).setValue(totalProtein - meals.get(position).getProtein());
+////                }
+//                database.addValueEventListener(new ValueEventListener() {
 //                    @Override
 //                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        database.child("setCalories").setValue(Integer.valueOf(dataSnapshot.getValue().toString())+meals.get(position).getCalories());
+//                        counter = 0;
+//                        if (counter == 0) {
+//                            counter = 1;
+//                            database.child("setCalories").setValue(Integer.valueOf(dataSnapshot.child("setCalories").getValue().toString())+meals.get(position).getCalories());
+//                            if (meals.size() == 1) {
+//                                database.child("totalCalories").child(mealType).getRef().removeValue();
+//                                database.child("totalCarbs").child(mealType).getRef().removeValue();
+//                                database.child("totalFat").child(mealType).getRef().removeValue();
+//                                database.child("totalProtein").child(mealType).getRef().removeValue();
+//                            } else {
+//                                totalCalories = Integer.valueOf(dataSnapshot.child("totalCalories").child(mealType).getValue().toString());
+//                                totalCarbs = Integer.valueOf(dataSnapshot.child("totalCarbs").child(mealType).getValue().toString());
+//                                totalFat = Integer.valueOf(dataSnapshot.child("totalFat").child(mealType).getValue().toString());
+//                                totalProtein = Integer.valueOf(dataSnapshot.child("totalProtein").child(mealType).getValue().toString());
+//                                database.child("totalCalories").child(mealType).setValue(totalCalories - meals.get(position).getCalories());
+//                                database.child("totalCarbs").child(mealType).setValue(totalCarbs - meals.get(position).getCarbs());
+//                                database.child("totalFat").child(mealType).setValue(totalFat - meals.get(position).getFat());
+//                                database.child("totalProtein").child(mealType).setValue(totalProtein - meals.get(position).getProtein());
+//                            }
+//                        }
 //                    }
 //
 //                    @Override
@@ -111,35 +172,10 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
 //
 //                    }
 //                });
-//                if (meals.size() == 1) {
-//                    database.child("totalCalories").child(mealType).getRef().removeValue();
-//                    database.child("totalCarbs").child(mealType).getRef().removeValue();
-//                    database.child("totalFat").child(mealType).getRef().removeValue();
-//                    database.child("totalProtein").child(mealType).getRef().removeValue();
-//                }
-//                else {
-//                    database.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            int totalCalories = Integer.valueOf(dataSnapshot.child("totalCalories").child(mealType).getValue().toString());
-//                            int totalCarbs = Integer.valueOf(dataSnapshot.child("totalCarbs").child(mealType).getValue().toString());
-//                            int totalFat = Integer.valueOf(dataSnapshot.child("totalFat").child(mealType).getValue().toString());
-//                            int totalProtein = Integer.valueOf(dataSnapshot.child("totalProtein").child(mealType).getValue().toString());
-//                            database.child("totalCalories").child(mealType).setValue(totalCalories - meals.get(position).getCalories());
-//                            database.child("totalCarbs").child(mealType).setValue(totalCarbs - meals.get(position).getCarbs());
-//                            database.child("totalFat").child(mealType).setValue(totalFat - meals.get(position).getFat());
-//                            database.child("totalProtein").child(mealType).setValue(totalProtein - meals.get(position).getProtein());
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }
 //                database.child(mealType).child(meals.get(position).getId()).getRef().removeValue();
 //                meals.remove(position);
 //                notifyDataSetChanged();
+////                context.getApplicationContext().getResources().
 //            }
 //        });
     }
@@ -169,14 +205,14 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView parent;
         private TextView mealName, numServings, numCalories;
-        private Button deleteBtn;
+//        private Button deleteBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             parent = itemView.findViewById(R.id.cardView);
             mealName = itemView.findViewById(R.id.mealName);
             numServings = itemView.findViewById(R.id.numServings);
             numCalories = itemView.findViewById(R.id.numCalories);
-            deleteBtn = itemView.findViewById(R.id.deleteBtn);
+//            deleteBtn = itemView.findViewById(R.id.deleteBtn);
         }
     }
 }

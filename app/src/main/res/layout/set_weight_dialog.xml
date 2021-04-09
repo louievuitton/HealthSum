@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="13dp"
+        android:background="@color/green5">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Set Weight"
+            android:textSize="17sp"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wegihtContent"
+        android:layout_below="@id/header"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/weightWarning"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="Please enter a valid weight in lbs."
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:visibility="invisible"/>
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weightWarning"
+            android:padding="10dp"
+            android:layout_marginBottom="30dp"
+            android:id="@+id/weightEditText"
+            android:hint="0"
+            android:gravity="right"
+            android:textSize="50sp"
+            android:background="@color/scaleBackground"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_below="@id/weightEditText"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/setWeightBtn"
+            android:background="@mipmap/feet_icon"/>
+
+
+    </RelativeLayout>
+</RelativeLayout>
