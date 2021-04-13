@@ -90,6 +90,16 @@ public class HomeFragment extends Fragment {
         breakfast_calories = view.findViewById(R.id.breakfast_calories);
         exerciseCaloriesBurned = view.findViewById(R.id.exerciseCaloriesBurned);
 
+        calendar = Calendar.getInstance();
+        selectedYear = Integer.valueOf(date.substring(6));
+        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+        calendar.set(Calendar.DAY_OF_MONTH, selectedDayOfMonth);
+
+        final String[] daysArray = getActivity().getResources().getStringArray(R.array.dayOfWeek);
+
         final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
         final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
@@ -100,7 +110,8 @@ public class HomeFragment extends Fragment {
             if (dom.charAt(0) == '0') {
                 dom = dom.substring(1);
             }
-            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + ", " + dom);
+            datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + (new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + " " + dom);
+//            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + " " + dom);
         }
 
         auth = FirebaseAuth.getInstance();
@@ -108,11 +119,6 @@ public class HomeFragment extends Fragment {
         database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(userId);
 
         fetchData();
-
-        calendar = Calendar.getInstance();
-        selectedYear = Integer.valueOf(date.substring(6));
-        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
-        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
 
         datepicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +144,8 @@ public class HomeFragment extends Fragment {
                             datepicker.setText("Today");
                         }
                         else {
-                            datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
+                            datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + month_date.format(calendar.getTime()) + " " + dayOfMonth);
+//                            datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
                         }
 
                         fetchData();

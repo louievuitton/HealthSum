@@ -168,20 +168,18 @@ public class NutritionAPI {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 gender = dataSnapshot.child("gender").getValue().toString();
                 age = Integer.valueOf(dataSnapshot.child("age").getValue().toString());
-//                weight = Double.valueOf(dataSnapshot.child("weight").getValue().toString());
                 height = dataSnapshot.child("height").getValue().toString();
 
 //                double wt = weight*(0.453592);
                 final double ht = (Double.valueOf(height.substring(0,1))*(30.48)) + (Double.valueOf(height.substring(2))*(2.54));
 
-                final ArrayList<Double> wt = new ArrayList<>();
+                final ArrayList<Integer> wt = new ArrayList<>();
                 db.child("weight").child(date).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                            wt.add(Double.valueOf(snapshot.getValue().toString()));
+                            wt.add(Integer.valueOf(snapshot.child("weight").getValue().toString()));
                         }
-//                        Toast.makeText(context, "weight: " + wt.get(wt.size()-1), Toast.LENGTH_SHORT).show();
                         addExercise(date, exercise, gender, age, Math.round(wt.get(wt.size()-1)*(0.453592)), Math.round(ht));
                     }
 
@@ -191,8 +189,6 @@ public class NutritionAPI {
                     }
 
                 });
-                // fetch exercise activity from api and add to firebase
-//                addExercise(date, exercise, gender, age, Math.round(wt), Math.round(ht));
             }
 
             @Override

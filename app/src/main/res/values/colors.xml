@@ -22,4 +22,5 @@
     <color name="mealActivityBackGrnd">#E1E1E1</color>
     <color name="datepicker">#616161</color>
     <color name="scaleBackground">#2B98D3</color>
+    <color name="toggleBtn">#12B9D5</color>
 </resources>

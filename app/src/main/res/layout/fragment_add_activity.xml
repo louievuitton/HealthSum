@@ -202,7 +202,8 @@
         android:id="@+id/addActivityBtn"
         android:text="Add"
         android:textColor="@color/white"
-        android:background="@drawable/add_activity_button"/>
+        android:background="@drawable/round_button"
+        android:backgroundTint="@color/darkerOrange"/>
 
 <!--    <Button-->
 <!--        android:layout_width="100dp"-->

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fragmentBackground"
     tools:context=".ChartsFragment">
 
     <RelativeLayout
@@ -32,7 +33,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/section1">
+            android:layout_margin="15dp"
+            android:paddingBottom="4dp"
+            android:id="@+id/section1"
+            android:background="@drawable/elevated_layout">
 
             <Button
                 android:id="@+id/datepicker"
@@ -49,19 +53,89 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/currentWeightTextView"
-                android:text="Current Weight Not Available"
                 android:layout_below="@id/datepicker"
+                android:id="@+id/weightTimestamp"
+                android:text="Last weighed: 06:24 AM"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentWeightTextView"
+                android:text="Please set your weight"
+                android:layout_below="@id/weightTimestamp"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
                 android:layout_centerHorizontal="true"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/currentWeightTextView"
+                android:layout_margin="14dp"
+                android:padding="8dp"
                 android:id="@+id/setWeightBtn"
-                android:text="Set Your Current Weight"
+                android:text="Set Current Weight"
+                android:textColor="@color/white"
                 android:textAllCaps="false"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/round_button"
+                android:backgroundTint="@color/darkerOrange"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/chartContent"
+            android:layout_below="@+id/section1"
+            android:padding="15dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:layout_marginLeft="8dp"
+                android:id="@+id/chartTextView"
+                android:text="WEIGHT"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:layout_width="66dp"
+                android:layout_height="35dp"
+                android:layout_toLeftOf="@id/weeklyBtn"
+                android:layout_marginTop="5dp"
+                android:id="@+id/dailyBtn"
+                android:text="Daily"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:background="@color/toggleBtn"/>
+
+            <Button
+                android:layout_width="58dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:id="@+id/weeklyBtn"
+                android:text="Weekly"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:background="@color/cancelBtn"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lineChart"
+                android:layout_below="@+id/chartTextView"
+                android:layout_marginTop="30dp"/>
+
         </RelativeLayout>
 
     </RelativeLayout>

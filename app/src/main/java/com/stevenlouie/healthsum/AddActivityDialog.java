@@ -37,7 +37,7 @@ import java.util.HashMap;
 public class AddActivityDialog extends AppCompatDialogFragment {
 
     private RelativeLayout addMealLayout, addExerciseLayout;
-    private TextView foodWarning, exerciseWarning;
+    private TextView foodWarning, exerciseWarning, selectMealTextView;
     private EditText mealEditText, exerciseEditText;
     private Button addBtn, cancelBtn;
     private RadioGroup radioGroup, selectActivityRG;
@@ -46,11 +46,11 @@ public class AddActivityDialog extends AppCompatDialogFragment {
     private String date;
     private String selectedActivity = "meal";
     private int numServings = 1;
-//    private FirebaseAuth auth;
-//    private int totalCalories = 0;
-//    private int totalCarbs = 0;
-//    private int totalFat = 0;
-//    private int totalProtein = 0;
+    private String type;
+
+    public AddActivityDialog(String type) {
+        this.type = type;
+    }
 
     @NonNull
     @Override
@@ -77,6 +77,23 @@ public class AddActivityDialog extends AppCompatDialogFragment {
         radioGroup = view.findViewById(R.id.radioGroup);
         selectActivityRG = view.findViewById(R.id.selectActivityRG);
         num_servings_spinner = view.findViewById(R.id.num_servings_spinner);
+        selectMealTextView = view.findViewById(R.id.selectMealTextView);
+
+        if (!type.equals("all")) {
+            selectActivityRG.setVisibility(View.GONE);
+            if (type.equals("exercise")) {
+                selectActivityRG.setVisibility(View.GONE);
+                addMealLayout.setVisibility(View.GONE);
+                addExerciseLayout.setVisibility(View.VISIBLE);
+            }
+            else {
+                addExerciseLayout.setVisibility(View.GONE);
+                selectActivityRG.setVisibility(View.GONE);
+                selectMealTextView.setVisibility(View.GONE);
+                radioGroup.setVisibility(View.GONE);
+                addMealLayout.setVisibility(View.VISIBLE);
+            }
+        }
 
         selectActivityRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -148,15 +165,38 @@ public class AddActivityDialog extends AppCompatDialogFragment {
                     foodWarning.setVisibility(View.GONE);
                     exerciseWarning.setVisibility(View.GONE);
                     NutritionAPI api = new NutritionAPI(getActivity());
-                    if (selectedActivity.equals("meal")) {
-                        api.fetchNutritionData(date, mealType, mealEditText.getText().toString(), numServings);
-                        mealEditText.getText().clear();
-                        mealEditText.clearFocus();
+                    if (type.equals("all")) {
+                        if (selectedActivity.equals("meal")) {
+                            api.fetchNutritionData(date, mealType, mealEditText.getText().toString(), numServings);
+                            mealEditText.getText().clear();
+                            mealEditText.clearFocus();
+                        } else if (selectedActivity.equals("exercise")) {
+                            api.fetchExerciseData(date, exerciseEditText.getText().toString());
+                            exerciseEditText.getText().clear();
+                            exerciseEditText.clearFocus();
+                        }
                     }
-                    else if (selectedActivity.equals("exercise")) {
-                        api.fetchExerciseData(date, exerciseEditText.getText().toString());
-                        exerciseEditText.getText().clear();
-                        exerciseEditText.clearFocus();
+                    else {
+                        if (type.equals("exercise")) {
+                            api.fetchExerciseData(date, exerciseEditText.getText().toString());
+                            exerciseEditText.getText().clear();
+                            exerciseEditText.clearFocus();
+                        }
+                        else if (type.equals("breakfast")) {
+                            api.fetchNutritionData(date, "breakfast", mealEditText.getText().toString(), numServings);
+                            mealEditText.getText().clear();
+                            mealEditText.clearFocus();
+                        }
+                        else if (type.equals("lunch")) {
+                            api.fetchNutritionData(date, "lunch", mealEditText.getText().toString(), numServings);
+                            mealEditText.getText().clear();
+                            mealEditText.clearFocus();
+                        }
+                        else if (type.equals("dinner")) {
+                            api.fetchNutritionData(date, "dinner", mealEditText.getText().toString(), numServings);
+                            mealEditText.getText().clear();
+                            mealEditText.clearFocus();
+                        }
                     }
                     Toast.makeText(getActivity(), "Successfully added activity", Toast.LENGTH_SHORT).show();
                     dismiss();
@@ -184,18 +224,35 @@ public class AddActivityDialog extends AppCompatDialogFragment {
     private boolean validateInput() {
         boolean valid = true;
 
-        if (selectedActivity.equals("meal")) {
-            if (mealEditText.getText().toString().equals("")) {
-                foodWarning.setText("Field cannot be blank");
-                foodWarning.setVisibility(View.VISIBLE);
-                valid = false;
+        if (type.equals("all")) {
+            if (selectedActivity.equals("meal")) {
+                if (mealEditText.getText().toString().equals("")) {
+                    foodWarning.setText("Field cannot be blank");
+                    foodWarning.setVisibility(View.VISIBLE);
+                    valid = false;
+                }
+            } else if (selectedActivity.equals("exercise")) {
+                if (exerciseEditText.getText().toString().equals("")) {
+                    exerciseWarning.setText("Field cannot be blank");
+                    exerciseWarning.setVisibility(View.VISIBLE);
+                    valid = false;
+                }
             }
         }
-        else if (selectedActivity.equals("exercise")) {
-            if (exerciseEditText.getText().toString().equals("")) {
-                exerciseWarning.setText("Field cannot be blank");
-                exerciseWarning.setVisibility(View.VISIBLE);
-                valid = false;
+        else {
+            if (type.equals("exercise")) {
+                if (exerciseEditText.getText().toString().equals("")) {
+                    exerciseWarning.setText("Field cannot be blank");
+                    exerciseWarning.setVisibility(View.VISIBLE);
+                    valid = false;
+                }
+            }
+            else {
+                if (mealEditText.getText().toString().equals("")) {
+                    foodWarning.setText("Field cannot be blank");
+                    foodWarning.setVisibility(View.VISIBLE);
+                    valid = false;
+                }
             }
         }
 

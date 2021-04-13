@@ -31,6 +31,11 @@ public class SetWeightDialog extends AppCompatDialogFragment {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private String date;
+    private String time;
+
+    public SetWeightDialog(String time) {
+        this.time = time;
+    }
 
     @NonNull
     @Override
@@ -59,7 +64,11 @@ public class SetWeightDialog extends AppCompatDialogFragment {
                 if (validate()) {
                     weightWarning.setVisibility(View.INVISIBLE);
 
-                    database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child("weight").child(date).child(database.getReference().child("Users").push().getKey()).setValue(Integer.valueOf(weightEditText.getText().toString()));
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("weight", Integer.valueOf(weightEditText.getText().toString()));
+                    map.put("timestamp", time);
+
+                    database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child("weight").child(date).child(database.getReference().child("Users").push().getKey()).updateChildren(map);
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(weightEditText.getWindowToken(), 0);
 

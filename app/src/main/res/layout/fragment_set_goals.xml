@@ -98,6 +98,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:background="@drawable/round_button"
+            android:backgroundTint="@color/darkerOrange"
             android:text="Set"
             android:textSize="17sp"
             android:textAllCaps="false"
