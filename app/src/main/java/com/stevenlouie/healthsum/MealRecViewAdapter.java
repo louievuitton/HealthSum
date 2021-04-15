@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,6 +68,10 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
 //                Toast.makeText(context, meals.get(position).getMeal() + " Selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Glide.with(context)
+                .load(meals.get(position).getImage())
+                .into(holder.itemImage);
 
 //        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -205,6 +211,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView parent;
         private TextView mealName, numServings, numCalories;
+        private ImageView itemImage;
 //        private Button deleteBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -212,6 +219,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
             mealName = itemView.findViewById(R.id.mealName);
             numServings = itemView.findViewById(R.id.numServings);
             numCalories = itemView.findViewById(R.id.numCalories);
+            itemImage = itemView.findViewById(R.id.itemImage);
 //            deleteBtn = itemView.findViewById(R.id.deleteBtn);
         }
     }

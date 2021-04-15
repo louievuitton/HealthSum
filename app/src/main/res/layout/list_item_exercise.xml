@@ -16,31 +16,43 @@
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/itemImage"
+            android:src="@drawable/ic_launcher_background"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/exerciseName"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/itemImage"
             android:text="ran 3 miles"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_below="@id/divider"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/exerciseName"
+            android:layout_toRightOf="@id/itemImage"
+            android:layout_marginLeft="15dp"
             android:id="@+id/caloriesBurned"
             android:text="355 calories burned"
-            android:textSize="16sp"/>
+            android:textSize="14sp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="14dp"
-            android:id="@+id/deleteBtn"
-            android:text="Delete"
-            android:textColor="@color/red"/>
+<!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginTop="14dp"-->
+<!--            android:id="@+id/deleteBtn"-->
+<!--            android:text="Delete"-->
+<!--            android:textColor="@color/red"/>-->
 
     </RelativeLayout>
 

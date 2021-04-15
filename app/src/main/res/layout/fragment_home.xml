@@ -330,7 +330,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="7dp"
                             android:layout_toRightOf="@id/lunch_icon"
                             android:text="Lunch"
                             android:textSize="16sp"
@@ -344,8 +344,18 @@
                             android:layout_below="@id/lunch_label"
                             android:layout_marginLeft="16dp"
                             android:layout_toRightOf="@id/lunch_icon"
-                            android:text=""
                             android:textColor="@color/secondaryText"/>
+
+                        <TextView
+                            android:id="@+id/lunch_calories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/lunch_details"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginRight="68dp"
+                            android:gravity="right"
+                            android:textColor="@color/secondaryText" />
 
                         <Button
                             android:layout_width="30dp"
@@ -386,12 +396,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="7dp"
                             android:layout_toRightOf="@id/dinner_icon"
                             android:text="Dinner"
-                            android:textAllCaps="true"
                             android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textAllCaps="true"/>
 
                         <TextView
                             android:id="@+id/dinner_details"
@@ -400,7 +410,17 @@
                             android:layout_below="@id/dinner_label"
                             android:layout_marginLeft="16dp"
                             android:layout_toRightOf="@id/dinner_icon"
-                            android:text=""
+                            android:textColor="@color/secondaryText"/>
+
+                        <TextView
+                            android:id="@+id/dinner_calories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dinner_details"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginRight="68dp"
+                            android:gravity="right"
                             android:textColor="@color/secondaryText" />
 
                         <Button

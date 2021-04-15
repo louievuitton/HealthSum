@@ -24,40 +24,18 @@
 
     </RelativeLayout>
 
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/selectActivityRG"
-        android:layout_below="@id/header"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="25dp">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/mealRB"
-            android:text="Meal"
-            android:checked="true"/>
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/exerciseRB"
-            android:text="Exercise"/>
-
-    </RadioGroup>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:id="@+id/activityLayout"
-        android:layout_below="@+id/selectActivityRG">
+        android:layout_below="@+id/header">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/addExerciseLayout"
-            android:padding="25dp"
+            android:paddingLeft="24dp"
             android:visibility="gone">
 
             <TextView
@@ -78,7 +56,7 @@
                 android:visibility="gone"/>
 
             <EditText
-                android:layout_width="300dp"
+                android:layout_width="305dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/exerciseWarning"
                 android:id="@+id/exerciseEditText"
@@ -90,52 +68,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/addMealLayout"
+            android:paddingLeft="24dp"
             android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/selectMealTextView"
-                android:layout_marginTop="14dp"
-                android:text="Select where you want to add your meal"
-                android:textSize="20sp"
-                android:layout_centerHorizontal="true"/>
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radioGroup"
-                android:layout_below="@id/selectMealTextView"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="25dp">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/breakfastRB"
-                    android:text="Breakfast"
-                    android:checked="true"/>
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lunchRB"
-                    android:text="Lunch"/>
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/dinnerRB"
-                    android:text="Dinner"/>
-            </RadioGroup>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/foodTextView"
-                android:layout_below="@+id/radioGroup"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="24dp"
+                android:layout_marginTop="12dp"
                 android:text="Food to add"
                 android:textSize="20sp"/>
 
@@ -144,17 +84,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/foodWarning"
                 android:layout_below="@+id/foodTextView"
-                android:layout_marginLeft="24dp"
                 android:text="Warning"
                 android:textColor="@color/red"
                 android:textSize="16sp"
                 android:visibility="gone"/>
 
             <EditText
-                android:layout_width="360dp"
+                android:layout_width="305dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/foodWarning"
-                android:layout_marginLeft="24dp"
                 android:id="@+id/mealEditText"
                 android:hint="e.g. 1 bowl of oatmeal"/>
 
@@ -163,7 +101,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/mealEditText"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="24dp"
                 android:id="@+id/servingsTextView"
                 android:text="Number of servings"
                 android:textSize="20sp"/>

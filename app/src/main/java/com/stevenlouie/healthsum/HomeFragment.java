@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout activityLayout;
     private RelativeLayout noDataLayout;
-    private TextView totalCaloriesLeft, totalCaloriesGained, totalCaloriesBurned, totalProteinConsumed, totalCarbsConsumed, totalFatConsumed, breakfast_details, breakfast_calories, exerciseDetails, exerciseCaloriesBurned, fab_text;
+    private TextView totalCaloriesLeft, totalCaloriesGained, totalCaloriesBurned, totalProteinConsumed, totalCarbsConsumed, totalFatConsumed, breakfast_details, breakfast_calories, lunch_details, lunch_calories, dinner_details, dinner_calories, exerciseDetails, exerciseCaloriesBurned, fab_text;
     private ProgressBar caloriesProgressBar;
     private LinearLayout fab_full;
     private FloatingActionButton fab;
@@ -89,6 +89,10 @@ public class HomeFragment extends Fragment {
         exerciseDetails = view.findViewById(R.id.exerciseDetails);
         breakfast_calories = view.findViewById(R.id.breakfast_calories);
         exerciseCaloriesBurned = view.findViewById(R.id.exerciseCaloriesBurned);
+        lunch_details = view.findViewById(R.id.lunch_details);
+        lunch_calories = view.findViewById(R.id.lunch_calories);
+        dinner_details = view.findViewById(R.id.dinner_details);
+        dinner_calories = view.findViewById(R.id.dinner_calories);
 
         calendar = Calendar.getInstance();
         selectedYear = Integer.valueOf(date.substring(6));
@@ -134,12 +138,7 @@ public class HomeFragment extends Fragment {
                         selectedDayOfMonth = dayOfMonth;
 
                         date = timeStamp.format(calendar.getTime());
-                        if (parentActivity.equals("main")) {
-                            ((MainActivity) getActivity()).setDate(date);
-                        }
-                        else if (parentActivity.equals("breakfast")) {
-                            ((BreakfastActivity) getActivity()).setDate(date);
-                        }
+                        ((MainActivity) getActivity()).setDate(date);
                         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
                             datepicker.setText("Today");
                         }
@@ -158,29 +157,8 @@ public class HomeFragment extends Fragment {
         breakfastCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                database.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @SuppressLint("ResourceType")
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        Intent intent = new Intent(getActivity(), BreakfastActivity.class);
-//                        intent.putExtra("date", date);
-//                        if (dataSnapshot.hasChild("breakfast")) {
-//                            intent.putExtra("breakfastSet", true);
-//                        }
-//                        else {
-//                            intent.putExtra("breakfastSet", false);
-//                        }
-//                        startActivity(intent);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
                 Intent intent = new Intent(getActivity(), BreakfastActivity.class);
                 intent.putExtra("date", date);
-//                intent.putExtra("breakfastSet", true);
                 startActivity(intent);
             }
         });
@@ -190,7 +168,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LunchActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("goalsSet", false);
                 startActivity(intent);
             }
         });
@@ -200,7 +177,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DinnerActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("goalsSet", false);
                 startActivity(intent);
             }
         });
@@ -210,7 +186,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ExerciseActivity.class);
                 intent.putExtra("date", date);
-//                intent.putExtra("exerciseSet", true);
                 startActivity(intent);
             }
         });
@@ -256,6 +231,10 @@ public class HomeFragment extends Fragment {
     private void fetchData() {
         breakfast_details.setText("");
         breakfast_calories.setText("");
+        lunch_details.setText("");
+        lunch_calories.setText("");
+        dinner_details.setText("");
+        dinner_calories.setText("");
         exerciseDetails.setText("");
         exerciseCaloriesBurned.setText("");
         database.addValueEventListener(new ValueEventListener() {
@@ -315,6 +294,36 @@ public class HomeFragment extends Fragment {
                                         breakfast_details.setText(breakfastMeals);
                                         breakfast_calories.setText("Total Calories: " + dataSnapshot.child("totalCalories").child("breakfast").getValue().toString());
                                     }
+
+                                    if (dataSnapshot.hasChild("lunch")) {
+                                        String lunchMeals = "";
+                                        for (DataSnapshot snapshot: dataSnapshot.child("lunch").getChildren()) {
+                                            lunchMeals += snapshot.child("meal").getValue().toString() + ", ";
+                                        }
+                                        if (lunchMeals.substring(lunchMeals.length()-2).equals(", ")) {
+                                            lunchMeals = lunchMeals.substring(0, lunchMeals.length()-2);
+                                        }
+                                        if (lunchMeals.length() > 40) {
+                                            lunchMeals = lunchMeals.substring(0, 40) + "...";
+                                        }
+                                        lunch_details.setText(lunchMeals);
+                                        lunch_calories.setText("Total Calories: " + dataSnapshot.child("totalCalories").child("lunch").getValue().toString());
+                                    }
+
+                                    if (dataSnapshot.hasChild("dinner")) {
+                                        String dinnerMeals = "";
+                                        for (DataSnapshot snapshot: dataSnapshot.child("dinner").getChildren()) {
+                                            dinnerMeals += snapshot.child("meal").getValue().toString() + ", ";
+                                        }
+                                        if (dinnerMeals.substring(dinnerMeals.length()-2).equals(", ")) {
+                                            dinnerMeals = dinnerMeals.substring(0, dinnerMeals.length()-2);
+                                        }
+                                        if (dinnerMeals.length() > 40) {
+                                            dinnerMeals = dinnerMeals.substring(0, 40) + "...";
+                                        }
+                                        dinner_details.setText(dinnerMeals);
+                                        dinner_calories.setText("Total Calories: " + dataSnapshot.child("totalCalories").child("dinner").getValue().toString());
+                                    }
                                 }
                                 else {
                                     totalCaloriesGained.setText("0");
@@ -373,87 +382,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-//        database.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (!dataSnapshot.child("setCalories").getValue().toString().equals("0")) {
-//                    totalCaloriesLeft.setText(dataSnapshot.child("setCalories").getValue().toString());
-//
-//                    if (dataSnapshot.hasChild("totalCalories")) {
-//                        int totalCalories = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalCalories").getChildren()) {
-//                            totalCalories += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//
-//                        int totalCarbs = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalCarbs").getChildren()) {
-//                            totalCarbs += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//
-//                        int totalFat = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalFat").getChildren()) {
-//                            totalFat += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//
-//                        int totalProtein = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalProtein").getChildren()) {
-//                            totalProtein += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//                        totalCaloriesGained.setText(String.valueOf(totalCalories));
-//                        totalCarbsConsumed.setText(String.valueOf(totalCarbs) + "g");
-//                        totalFatConsumed.setText(String.valueOf(totalFat) + "g");
-//                        totalProteinConsumed.setText(String.valueOf(totalProtein) + "g");
-//                    }
-//                }
-//                else {
-//                    mealsLayout.setVisibility(View.GONE);
-//                    noDataLayout.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        if (mealsLayout.getVisibility() == View.VISIBLE) {
-//            database.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.hasChild("totalCalories")) {
-//                        int totalCalories = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalCalories").getChildren()) {
-//                            totalCalories += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//
-//                        int totalCarbs = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalCarbs").getChildren()) {
-//                            totalCarbs += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//
-//                        int totalFat = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalFat").getChildren()) {
-//                            totalFat += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//
-//                        int totalProtein = 0;
-//                        for (DataSnapshot snapshot: dataSnapshot.child("totalProtein").getChildren()) {
-//                            totalProtein += Integer.valueOf(snapshot.getValue().toString());
-//                        }
-//                        totalCaloriesGained.setText(String.valueOf(totalCalories));
-//                        totalCarbsConsumed.setText(String.valueOf(totalCarbs) + "g");
-//                        totalFatConsumed.setText(String.valueOf(totalFat) + "g");
-//                        totalProteinConsumed.setText(String.valueOf(totalProtein) + "g");
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
     }
 
     private void updateProgressBar() {

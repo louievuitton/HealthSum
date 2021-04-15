@@ -7,14 +7,16 @@ public class NutritionModel {
     private int fat;
     private int carbs;
     private int protein;
+    private String image;
 
-    public NutritionModel(String foodName, int servingQty, int calories, int fat, int carbs, int protein) {
+    public NutritionModel(String foodName, int servingQty, int calories, int fat, int carbs, int protein, String image) {
         this.foodName = foodName;
         this.servingQty = servingQty;
         this.calories = calories;
         this.fat = fat;
         this.carbs = carbs;
         this.protein = protein;
+        this.image = image;
     }
 
     public NutritionModel() {
@@ -67,6 +69,14 @@ public class NutritionModel {
 
     public void setProtein(int protein) {
         this.protein = protein;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

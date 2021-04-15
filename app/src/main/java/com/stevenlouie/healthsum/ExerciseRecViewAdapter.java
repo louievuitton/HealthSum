@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -45,6 +47,10 @@ public class ExerciseRecViewAdapter extends RecyclerView.Adapter<ExerciseRecView
 //                Toast.makeText(context, meals.get(position).getMeal() + " Selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Glide.with(context)
+                .load("https://static.thenounproject.com/png/118627-200.png")
+                .into(holder.itemImage);
     }
 
     @Override
@@ -68,13 +74,15 @@ public class ExerciseRecViewAdapter extends RecyclerView.Adapter<ExerciseRecView
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView parent;
         private TextView exerciseName, caloriesBurned;
-        private Button deleteBtn;
+//        private Button deleteBtn;
+        private ImageView itemImage;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             parent = itemView.findViewById(R.id.cardView);
             exerciseName = itemView.findViewById(R.id.exerciseName);
             caloriesBurned = itemView.findViewById(R.id.caloriesBurned);
-            deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            itemImage = itemView.findViewById(R.id.itemImage);
+//            deleteBtn = itemView.findViewById(R.id.deleteBtn);
         }
     }
 }

@@ -125,12 +125,7 @@ public class AddActivityFragment extends Fragment {
                         selectedDayOfMonth = dayOfMonth;
 
                         date = timeStamp.format(calendar.getTime());
-                        if (parentActivity.equals("main")) {
-                            ((MainActivity) getActivity()).setDate(date);
-                        }
-                        else if (parentActivity.equals("breakfast")) {
-                            ((BreakfastActivity) getActivity()).setDate(date);
-                        }
+                        ((MainActivity) getActivity()).setDate(date);
                         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
                             datepicker.setText("Today");
                         }

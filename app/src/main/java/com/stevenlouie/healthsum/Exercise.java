@@ -5,11 +5,13 @@ public class Exercise {
     private int caloriesBurned;
     private String exercise;
     private String id;
+    private String image;
 
-    public Exercise(int caloriesBurned, String exercise, String id) {
+    public Exercise(int caloriesBurned, String exercise, String id, String image) {
         this.caloriesBurned = caloriesBurned;
         this.exercise = exercise;
         this.id = id;
+        this.image = image;
     }
 
     public Exercise() {}
@@ -36,5 +38,13 @@ public class Exercise {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

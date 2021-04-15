@@ -6,6 +6,7 @@ public class Meal {
     private int carbs;
     private int fat;
     private String id;
+    private String image;
     private String meal;
     private int protein;
     private int servings;
@@ -14,11 +15,12 @@ public class Meal {
 
     }
 
-    public Meal(int calories, int carbs, int fat, String id, String meal, int protein, int servings) {
+    public Meal(int calories, int carbs, int fat, String id, String image, String meal, int protein, int servings) {
         this.calories = calories;
         this.carbs = carbs;
         this.fat = fat;
         this.id = id;
+        this.image = image;
         this.meal = meal;
         this.protein = protein;
         this.servings = servings;
@@ -30,6 +32,14 @@ public class Meal {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getMeal() {

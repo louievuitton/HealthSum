@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.stevenlouie.healthsum.models.ExerciseModel;
 import com.stevenlouie.healthsum.models.NutritionModel;
 
 import org.json.JSONArray;
@@ -45,7 +46,7 @@ public class NutritionAPI {
         this.context = context;
     }
 
-    public void fetchNutritionData(final String date, final String mealType, String foodName, final int numServings) {
+    public void fetchNutritionData(final String date, final String mealType, final String foodName, final int numServings) {
         String url = "https://trackapi.nutritionix.com/v2/natural/nutrients";
         JSONObject obj = new JSONObject();
         try {
@@ -72,6 +73,7 @@ public class NutritionAPI {
                         model.setFat((int) Math.round(obj.getDouble("nf_total_fat")));
                         model.setCarbs((int) Math.round(obj.getDouble("nf_total_carbohydrate")));
                         model.setProtein((int) Math.round(obj.getDouble("nf_protein")));
+                        model.setImage(obj.getJSONObject("photo").getString("thumb"));
                         models.add(model);
                     }
 
@@ -79,22 +81,20 @@ public class NutritionAPI {
                     final String key = database.push().getKey();
                     final HashMap<String, Object> map = new HashMap<>();
                     map.put("id", key);
-                    map.put("meal", "");
+                    map.put("meal", foodName);
                     map.put("servings", numServings);
                     map.put("calories", 0);
                     map.put("fat", 0);
                     map.put("carbs", 0);
                     map.put("protein", 0);
+                    map.put("image", models.get(0).getImage());
 
                     for (int i = 0; i < models.size(); i++) {
-                        map.put("meal", map.get("meal").toString() + " and " + models.get(i).getFoodName());
                         map.put("calories", ((int) map.get("calories")) + models.get(i).getCalories());
                         map.put("fat", ((int) map.get("fat")) + models.get(i).getFat());
                         map.put("carbs", ((int) map.get("carbs")) + models.get(i).getCarbs());
                         map.put("protein", ((int) map.get("protein")) + models.get(i).getProtein());
                     }
-
-                    map.put("meal", map.get("meal").toString().substring(5));
 
                     database.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -130,12 +130,6 @@ public class NutritionAPI {
 
                         }
                     });
-
-//                    database.child("totalCalories").child(mealType).setValue(totalCalories+((int) map.get("calories")));
-//                    database.child("totalCarbs").child(mealType).setValue(totalCarbs+((int) map.get("carbs")));
-//                    database.child("totalFat").child(mealType).setValue(totalFat+((int) map.get("fat")));
-//                    database.child("totalProtein").child(mealType).setValue(totalProtein+((int) map.get("protein")));
-//                    database.child(mealType).child(key).updateChildren(map);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -196,72 +190,6 @@ public class NutritionAPI {
 
             }
         });
-
-//        String url = "https://trackapi.nutritionix.com/v2/natural/exercise";
-//        JSONObject obj = new JSONObject();
-//        try {
-//            obj.put("query", exercise);
-//            obj.put("gender", "male");
-//            obj.put("weight_kg", 72.5);
-//            obj.put("height_cm", 167.64);
-//            obj.put("age", 30);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
-//
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray exercises = response.getJSONArray("exercises");
-//                    for (int i = 0; i < exercises.length(); i++) {
-//                        totalCaloriesBurned = ((JSONObject) exercises.get(i)).getInt("nf_calories");
-//                    }
-//
-//                    final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date);
-//                    database.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            int caloriesBurned = Integer.valueOf(dataSnapshot.child("caloriesBurned").getValue().toString());
-//                            database.child("caloriesBurned").setValue(caloriesBurned + totalCaloriesBurned);
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                    String key = database.push().getKey();
-//                    final HashMap<String, Object> map = new HashMap<>();
-//                    map.put("id", key);
-//                    map.put("exercise", exercise);
-//                    map.put("caloriesBurned", totalCaloriesBurned);
-//
-//                    database.child("exercises").child(key).updateChildren(map);
-//
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(context, "Please enter a valid exercise", Toast.LENGTH_LONG).show();
-//            }
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("x-app-id", "9787a77e");
-//                params.put("x-app-key", "40785cdacf0ad9c162ae95eb2f83aa9d");
-//                return params;
-//            }
-//        };
-//
-//        queue.add(request);
     }
 
     private void addExercise(final String date, final String exercise, String g, int a, double w, double h) {
@@ -283,17 +211,36 @@ public class NutritionAPI {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    ArrayList<ExerciseModel> models = new ArrayList<>();
                     JSONArray exercises = response.getJSONArray("exercises");
                     for (int i = 0; i < exercises.length(); i++) {
-                        totalCaloriesBurned = ((JSONObject) exercises.get(i)).getInt("nf_calories");
+                        JSONObject obj = (JSONObject) exercises.get(i);
+                        ExerciseModel model = new ExerciseModel();
+                        model.setCaloriesBurned(obj.getInt("nf_calories"));
+                        model.setImage(obj.getJSONObject("photo").getString("thumb"));
+                        models.add(model);
                     }
 
                     final DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date);
+                    final HashMap<String, Object> map = new HashMap<>();
+                    final String key = database.push().getKey();
+                    map.put("id", key);
+                    map.put("exercise", exercise);
+                    map.put("caloriesBurned", 0);
+                    map.put("image", models.get(0).getImage());
+
+                    for (int i = 0; i < models.size(); i++) {
+                        map.put("caloriesBurned", ((int) map.get("caloriesBurned")) + models.get(i).getCaloriesBurned());
+                    }
+
+                    totalCaloriesBurned = (int) map.get("caloriesBurned");
+
                     database.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             int caloriesBurned = Integer.valueOf(dataSnapshot.child("caloriesBurned").getValue().toString());
                             database.child("caloriesBurned").setValue(caloriesBurned + totalCaloriesBurned);
+                            database.child("exercises").child(key).updateChildren(map);
                         }
 
                         @Override
@@ -301,15 +248,6 @@ public class NutritionAPI {
 
                         }
                     });
-                    String key = database.push().getKey();
-                    final HashMap<String, Object> map = new HashMap<>();
-                    map.put("id", key);
-                    map.put("exercise", exercise);
-                    map.put("caloriesBurned", totalCaloriesBurned);
-
-                    database.child("exercises").child(key).updateChildren(map);
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
