@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         final Bundle bundle = new Bundle();
         bundle.putString("date", date);
-        bundle.putString("activity", "main");
 
         fab_full.setClickable(false);
 
@@ -56,11 +55,6 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new HomeFragment();
                         selectedFragment.setArguments(bundle);
                         break;
-//                    case R.id.setGoalsFragment:
-//                        bundle.putString("date", date);
-//                        selectedFragment = new SetGoalsFragment();
-//                        selectedFragment.setArguments(bundle);
-//                        break;
                     case R.id.addActivityFragment:
                         bundle.putString("date", date);
                         selectedFragment = new AddActivityFragment();

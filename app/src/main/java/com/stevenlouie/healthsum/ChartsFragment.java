@@ -16,12 +16,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,8 +38,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ChartsFragment extends Fragment {
 
@@ -54,7 +53,7 @@ public class ChartsFragment extends Fragment {
     private int selectedDayOfMonth;
     private Calendar calendar;
     private ArrayList<WeightModel> weights = new ArrayList<>();
-    private ArrayList<Double> averageWeights = new ArrayList<>();
+    private ArrayList<WeightModel> averageWeights = new ArrayList<>();
 
     public ChartsFragment() {
         // Required empty public constructor
@@ -81,27 +80,26 @@ public class ChartsFragment extends Fragment {
         weightTimestamp = view.findViewById(R.id.weightTimestamp);
 
         calendar = Calendar.getInstance();
-        selectedYear = Integer.valueOf(date.substring(6));
-        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
-        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
+        selectedYear = Integer.valueOf(date.substring(0, 4));
+        selectedMonth = Integer.valueOf(date.substring(5, 7)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(8));
         calendar.set(Calendar.YEAR, selectedYear);
         calendar.set(Calendar.MONTH, selectedMonth);
         calendar.set(Calendar.DAY_OF_MONTH, selectedDayOfMonth);
 
         final String[] daysArray = getActivity().getResources().getStringArray(R.array.dayOfWeek);
 
-        final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+        final SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
         final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
             datepicker.setText("Today");
         }
         else {
-            String dom = date.substring(3, 5);
+            String dom = date.substring(8);
             if (dom.charAt(0) == '0') {
                 dom = dom.substring(1);
             }
-            datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + (new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + " " + dom);
-//            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + ", " + dom);
+            datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + (new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(5, 7))-1]).substring(0, 3) + " " + dom);
         }
 
         fetchData();
@@ -126,7 +124,6 @@ public class ChartsFragment extends Fragment {
                         }
                         else {
                             datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + month_date.format(calendar.getTime()) + " " + dayOfMonth);
-//                            datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
                         }
 
                         fetchData();
@@ -206,6 +203,9 @@ public class ChartsFragment extends Fragment {
                         values.add(new Entry(i, weights.get(i).getWeight()));
                     }
 
+                    XAxis xAxis = lineChart.getXAxis();
+                    xAxis.setValueFormatter(new XAxisValueFormatter(weights));
+
                     LineDataSet set = new LineDataSet(values, "Data Set");
                     set.setFillAlpha(110);
                     set.setLineWidth(3f);
@@ -248,58 +248,76 @@ public class ChartsFragment extends Fragment {
         lineChart.invalidate();
         lineChart.clear();
         averageWeights.clear();
-//        String selectedDate = date.substring(6) + date.substring(0,2) + date.substring(3,5);
-//        LocalDate endDate = LocalDate.parse(selectedDate);
-//        LocalDate startDate = endDate.minusDays(7);
-//        ArrayList<LocalDate> listOfDates1 = Stream.iterate(startDate, date -> date.plusDays(1))
-//                .limit(7)
-//                .collect(Collectors.toList());
-//        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("weight").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                ArrayList<String> dates = new ArrayList<>();
-//                if (dataSnapshot.hasChild(date)) {
-//                    dates.add(date);
-//                    ArrayList<Double> wt = new ArrayList<>();
-//                    for (DataSnapshot snapshot: dataSnapshot.child(date).getChildren()) {
-//                        wt.add(Double.valueOf(snapshot.getValue().toString()));
-//                    }
-//
-//                    double sum = 0;
-//                    for (Double weight: wt) {
-//                        sum += weight;
-//                    }
-//                    averageWeights.add(sum/wt.size());
-//
-//                    ArrayList<Entry> values = new ArrayList<>();
-//                    for (int i = 0; i < averageWeights.size(); i++) {
-//                        values.add(new Entry(i, averageWeights.get(i).floatValue()));
-//                    }
-//                    LineDataSet set = new LineDataSet(values, "Data Set");
-//                    set.setFillAlpha(110);
-//                    set.setLineWidth(3f);
-//                    set.setColor(Color.GREEN);
-//                    set.setValueTextSize(20f);
-//                    set.setValueTextColor(Color.RED);
-//                    ArrayList<ILineDataSet> dataset = new ArrayList<>();
-//                    dataset.add(set);
-//                    lineChart.getAxisRight().setEnabled(false);
-//                    lineChart.getLegend().setEnabled(false);
-//                    lineChart.getDescription().setEnabled(false);
-//                    lineChart.setData(new LineData(dataset));
-//                    lineChart.notifyDataSetChanged();
-//                    lineChart.invalidate();
-//                }
-//                else {
-//                    currentWeightTextView.setText("Weight has not been set for this date");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+
+        LocalDate start = LocalDate.parse(date);
+        final ArrayList<String> dates = new ArrayList<>();
+        int counter = 0;
+        while (counter < 8) {
+            dates.add(0, start.toString());
+            start = start.minusDays(1);
+            counter++;
+        }
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("weight").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean found = false;
+                for (int i = 0; i < dates.size(); i++) {
+                    WeightModel model = new WeightModel();
+                    model.setTimestamp(dates.get(i));
+                    if (dataSnapshot.hasChild(dates.get(i))) {
+                        ArrayList<Integer> wt = new ArrayList<>();
+                        for (DataSnapshot snapshot: dataSnapshot.child(date).getChildren()) {
+                            wt.add(Integer.valueOf(snapshot.child("weight").getValue().toString()));
+                        }
+
+                        int sum = 0;
+                        for (Integer weight: wt) {
+                            sum += weight;
+                        }
+                        model.setWeight(sum/wt.size());
+                        found = true;
+                    }
+                    else {
+                        model.setWeight(0);
+                    }
+                    averageWeights.add(model);
+                }
+
+                if (found) {
+                    ArrayList<Entry> values = new ArrayList<>();
+                    for (int i = 0; i < averageWeights.size(); i++) {
+                        values.add(new Entry(i, averageWeights.get(i).getWeight()));
+                    }
+
+                    XAxis xAxis = lineChart.getXAxis();
+                    xAxis.setValueFormatter(new XAxisValueFormatter(averageWeights));
+
+                    LineDataSet set = new LineDataSet(values, "Data Set");
+                    set.setFillAlpha(110);
+                    set.setLineWidth(3f);
+                    set.setColor(Color.GREEN);
+                    set.setValueTextSize(20f);
+                    set.setValueTextColor(Color.RED);
+                    ArrayList<ILineDataSet> dataset = new ArrayList<>();
+                    dataset.add(set);
+                    lineChart.getAxisRight().setEnabled(false);
+                    lineChart.getLegend().setEnabled(false);
+                    lineChart.getDescription().setEnabled(false);
+                    lineChart.setData(new LineData(dataset));
+                    lineChart.notifyDataSetChanged();
+                    lineChart.invalidate();
+                }
+                else {
+                    currentWeightTextView.setText("Weight has not been set for this date");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void openDialog(String time) {
@@ -308,5 +326,19 @@ public class ChartsFragment extends Fragment {
         SetWeightDialog dialog = new SetWeightDialog(time);
         dialog.setArguments(bundle);
         dialog.show(getActivity().getSupportFragmentManager(), "Set Weight Dialog");
+    }
+
+    private class XAxisValueFormatter extends IndexAxisValueFormatter {
+
+        private ArrayList<WeightModel> weights;
+
+        public XAxisValueFormatter(ArrayList<WeightModel> weights) {
+            this.weights = weights;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            return weights.get((int) value).getTimestamp()+"";
+        }
     }
 }

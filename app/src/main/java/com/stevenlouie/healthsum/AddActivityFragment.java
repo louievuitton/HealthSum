@@ -69,7 +69,6 @@ public class AddActivityFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             date = bundle.getString("date");
-            parentActivity = bundle.getString("activity");
         }
 
         auth = FirebaseAuth.getInstance();
@@ -88,27 +87,26 @@ public class AddActivityFragment extends Fragment {
         num_servings_spinner = view.findViewById(R.id.num_servings_spinner);
 
         calendar = Calendar.getInstance();
-        selectedYear = Integer.valueOf(date.substring(6));
-        selectedMonth = Integer.valueOf(date.substring(0, 2)) - 1;
-        selectedDayOfMonth = Integer.valueOf(date.substring(3, 5));
+        selectedYear = Integer.valueOf(date.substring(0, 4));
+        selectedMonth = Integer.valueOf(date.substring(5, 7)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(8));
         calendar.set(Calendar.YEAR, selectedYear);
         calendar.set(Calendar.MONTH, selectedMonth);
         calendar.set(Calendar.DAY_OF_MONTH, selectedDayOfMonth);
 
         final String[] daysArray = getActivity().getResources().getStringArray(R.array.dayOfWeek);
 
-        final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+        final SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
         final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
             datepicker.setText("Today");
         }
         else {
-            String dom = date.substring(3, 5);
+            String dom = date.substring(8);
             if (dom.charAt(0) == '0') {
                 dom = dom.substring(1);
             }
-            datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + (new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + " " + dom);
-//            datepicker.setText((new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(0, 2))-1]).substring(0, 3) + ", " + dom);
+            datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + (new DateFormatSymbols().getMonths()[Integer.valueOf(date.substring(5, 7))-1]).substring(0, 3) + " " + dom);
         }
 
         datepicker.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +129,6 @@ public class AddActivityFragment extends Fragment {
                         }
                         else {
                             datepicker.setText(daysArray[calendar.get(Calendar.DAY_OF_WEEK)-1] + ", " + month_date.format(calendar.getTime()) + " " + dayOfMonth);
-//                            datepicker.setText(month_date.format(calendar.getTime()) + ", " + dayOfMonth);
                         }
 
                         foodWarning.setVisibility(View.GONE);

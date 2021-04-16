@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     passwordWarning.setVisibility(View.INVISIBLE);
 
                     calendar = Calendar.getInstance();
-                    SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+                    SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
                     final String date = timeStamp.format(calendar.getTime());
                     auth.signInWithEmailAndPassword("barney@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
                         @Override
@@ -75,13 +75,13 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.hasChild("03-05-2021")) {
+                                    if (!dataSnapshot.hasChild("2021-03-05")) {
                                         HashMap<String, Object> map = new HashMap<>();
                                         map.put("caloriesLeft", 0);
 //                                        map.put("setSteps", 0);
                                         map.put("caloriesBurned", 0);
                                         map.put("calorieGoal", 0);
-                                        FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("03-05-2021").updateChildren(map);
+                                        FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("2021-03-05").updateChildren(map);
                                     }
                                 }
 
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                             });
                             Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("date", "03-05-2021");
+                            intent.putExtra("date", "2021-03-05");
                             startActivity(intent);
                             finish();
                         }

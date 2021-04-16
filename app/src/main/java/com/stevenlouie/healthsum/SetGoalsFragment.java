@@ -68,7 +68,7 @@ public class SetGoalsFragment extends Fragment {
         setGoalsBtn = view.findViewById(R.id.setGoalsButton);
         datepicker = view.findViewById(R.id.datepicker);
 
-        final SimpleDateFormat timeStamp = new SimpleDateFormat("MM-dd-yyyy");
+        final SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
         final SimpleDateFormat month_date = new SimpleDateFormat("MMM");
         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
             datepicker.setText("Today");
@@ -121,12 +121,7 @@ public class SetGoalsFragment extends Fragment {
                         selectedDayOfMonth = dayOfMonth;
 
                         date = timeStamp.format(calendar.getTime());
-                        if (parentActivity.equals("main")) {
-                            ((MainActivity) getActivity()).setDate(date);
-                        }
-                        else if (parentActivity.equals("breakfast")) {
-                            ((BreakfastActivity) getActivity()).setDate(date);
-                        }
+                        ((MainActivity) getActivity()).setDate(date);
                         if (timeStamp.format(Calendar.getInstance().getTime()).equals(date)) {
                             datepicker.setText("Today");
                         }

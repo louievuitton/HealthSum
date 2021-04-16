@@ -177,15 +177,15 @@ public class SignupActivity extends AppCompatActivity {
                                 map1.put("height", heightFt + "," + heightIn);
                                 DatabaseReference database =  FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
                                 database.updateChildren(map1);
-                                database.child("weight").child("03-05-2021").child(database.push().getKey()).setValue(Integer.valueOf(editWeight.getText().toString()));
+                                database.child("weight").child("2021-03-05").child(database.push().getKey()).setValue(Integer.valueOf(editWeight.getText().toString()));
                                 HashMap<String, Object> map = new HashMap<>();
                                 map.put("caloriesLeft", 0);
 //                                map.put("setSteps", 0);
                                 map.put("caloriesBurned", 0);
                                 map.put("calorieGoal", 0);
-                                FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("03-05-2021").updateChildren(map);
+                                FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("2021-03-05").updateChildren(map);
                                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                intent.putExtra("date", "03-05-2021");
+                                intent.putExtra("date", "2021-03-05");
                                 startActivity(intent);
                                 finish();
                             }
