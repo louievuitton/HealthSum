@@ -34,7 +34,7 @@ import java.util.Calendar;
 public class DinnerActivity extends AppCompatActivity {
 
     private LinearLayout fab_full;
-    private TextView caloriesConsumed, listTextView;
+    private TextView caloriesConsumed, listTextView, proteinConsumed, carbsConsumed, fatConsumed;
     private RecyclerView dinnerRecView;
     private MealRecViewAdapter adapter;
     private FirebaseAuth auth;
@@ -55,6 +55,9 @@ public class DinnerActivity extends AppCompatActivity {
         adapter = new MealRecViewAdapter(this);
         dinnerRecView = findViewById(R.id.dinnerRecView);
         fab_full = findViewById(R.id.fab_full);
+        proteinConsumed = findViewById(R.id.proteinConsumed);
+        carbsConsumed = findViewById(R.id.carbsConsumed);
+        fatConsumed = findViewById(R.id.fatConsumed);
 
         fab_full.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +85,9 @@ public class DinnerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("dinner")) {
                     caloriesConsumed.setText(dataSnapshot.child("totalCalories").child("dinner").getValue().toString());
+                    proteinConsumed.setText(dataSnapshot.child("totalProtein").child("dinner").getValue().toString() + "g");
+                    carbsConsumed.setText(dataSnapshot.child("totalCarbs").child("dinner").getValue().toString() + "g");
+                    fatConsumed.setText(dataSnapshot.child("totalFat").child("dinner").getValue().toString() + "g");
 
                     ArrayList<Meal> list = new ArrayList<>();
 

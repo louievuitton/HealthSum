@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,7 +66,8 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(context, meals.get(position).getMeal() + " Selected", Toast.LENGTH_SHORT).show();
+                NutritionFactsDialog dialog = new NutritionFactsDialog(meals.get(position));
+                dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Show nutritional facts dialog");
             }
         });
 

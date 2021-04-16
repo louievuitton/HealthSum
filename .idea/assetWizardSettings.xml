@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\kellyl\AppData\Local\Temp\baseline_note_add_24.xml" />
+                                                <entry key="imagePath" value="C:\Users\kellyl\AppData\Local\Temp\baseline_lens_24.xml" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -36,7 +36,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/note_add/baseline_note_add_24.xml" />
+                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/lens/baseline_lens_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -81,9 +81,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="C:\Users\kellyl\Downloads\HealthSum-development\app\src\main\res\mipmap-xxxhdpi\feet_icon.jpg" />
-                                      <entry key="outputName" value="ic_feet" />
+                                      <entry key="outputName" value="ic_bullet" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="ff7214" />
                                     </map>

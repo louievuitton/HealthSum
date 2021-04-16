@@ -45,42 +45,17 @@
                 <RelativeLayout
                     android:id="@+id/statisticsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="140dp"
                     android:layout_margin="15dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:background="@drawable/elevated_layout">
-
-                    <!--                    <Button-->
-                    <!--                        android:id="@+id/datepicker"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_centerHorizontal="true"-->
-                    <!--                        android:padding="5dp"-->
-                    <!--                        android:text="Today"-->
-                    <!--                        android:textColor="@color/datepicker"-->
-                    <!--                        android:textSize="16sp"-->
-                    <!--                        android:textAllCaps="false"-->
-                    <!--                        android:drawableLeft="@drawable/ic_calendar"-->
-                    <!--                        android:background="@null"/>-->
-
-                    <!--                    <ProgressBar-->
-                    <!--                        android:id="@+id/caloriesProgressBar"-->
-                    <!--                        style="?android:attr/progressBarStyleHorizontal"-->
-                    <!--                        android:layout_width="100dp"-->
-                    <!--                        android:layout_height="100dp"-->
-                    <!--                        android:layout_below="@id/datepicker"-->
-                    <!--                        android:indeterminate="false"-->
-                    <!--                        android:max="100"-->
-                    <!--                        android:progress="100"-->
-                    <!--                        android:progressDrawable="@drawable/circular_progress_bar"-->
-                    <!--                        android:layout_centerInParent="true"/>-->
 
                     <TextView
                         android:id="@+id/caloriesConsumed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/datepicker"
-                        android:layout_marginTop="8dp"
                         android:text="0"
                         android:textColor="@color/blue"
                         android:textSize="25sp"
@@ -98,6 +73,98 @@
                         android:textStyle="bold"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/caloriesConsumed"/>
+
+                    <RelativeLayout
+                        android:layout_width="97dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/proteinLayout">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_above="@id/proteinTextView"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/proteinConsumed"
+                            android:text="0g"
+                            android:textSize="22sp"
+                            android:textColor="@color/darkerOrange"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/proteinTextView"
+                            android:text="Protein"
+                            android:textAllCaps="true"
+                            android:textColor="@color/datepicker"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="167dp"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/proteinLayout"
+                        android:id="@+id/carbsLayout">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_above="@id/carbsTextView"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/carbsConsumed"
+                            android:text="0g"
+                            android:textSize="22sp"
+                            android:textColor="@color/darkerOrange"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/carbsTextView"
+                            android:text="Carbohydrates"
+                            android:textAllCaps="true"
+                            android:textColor="@color/datepicker"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="97dp"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/carbsLayout"
+                        android:id="@+id/fatLayout">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_above="@id/fatTextView"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/fatConsumed"
+                            android:text="0g"
+                            android:textSize="22sp"
+                            android:textColor="@color/darkerOrange"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/fatTextView"
+                            android:text="Fat"
+                            android:textAllCaps="true"
+                            android:textColor="@color/datepicker"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 

@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/nutritionFactsTextView"
+        android:text="Nutrition Facts"
+        android:fontFamily="@font/archivo_black"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:textAllCaps="false"
+        android:textStyle="bold"/>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="370dp"
+        android:layout_height="2dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/nutritionFactsTextView"
+        android:background="@color/datepicker"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider2"
+        android:id="@+id/servingsLayout"
+        android:background="@color/bbyBlue"
+        android:padding="7dp">
+
+        <TextView
+            android:id="@+id/servingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/archivo_black"
+            android:text="Num Servings"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/numServingsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/archivo_black"
+            android:text="1"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="330dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/servingsLayout"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider3"
+        android:id="@+id/caloriesLayout"
+        android:padding="10dp"
+        android:background="@color/lightPink">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/amtPerServing"
+            android:text="Amount per serving"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/amtPerServing"
+            android:id="@+id/caloriesTextView"
+            android:fontFamily="@font/archivo_black"
+            android:text="Calories"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textSize="35sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/numCaloriesValue"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/archivo_black"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="40sp"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="330dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/caloriesLayout"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dailyValuesLayout"
+        android:layout_below="@id/divider4">
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:padding="8dp"-->
+<!--            android:id="@+id/percentDailyValue"-->
+<!--            android:text="% Daily Value*"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:fontFamily="@font/archivo_black"-->
+<!--            android:textSize="15sp"-->
+<!--            android:background="@color/lightPurple"/>-->
+
+<!--        <View-->
+<!--            android:id="@+id/divider5"-->
+<!--            android:layout_width="360dp"-->
+<!--            android:layout_height="2dp"-->
+<!--            android:layout_below="@id/percentDailyValue"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:background="@color/datepicker"/>-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:id="@+id/totalFatTextView"
+            android:text="Total Fat"
+            android:textColor="@color/black"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="120dp"
+            android:id="@+id/totalFatsValue"
+            android:text="0g"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/totalFatTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider5"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="35dp"
+            android:id="@+id/saturatedFatTextView"
+            android:text="Saturated Fat"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider5"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="150dp"
+            android:id="@+id/saturatedFatValue"
+            android:text="0g"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/saturatedFatTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_below="@id/divider6"
+            android:id="@+id/cholesterolTextView"
+            android:text="Cholesterol"
+            android:textColor="@color/black"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider6"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="150dp"
+            android:id="@+id/cholesterolValue"
+            android:text="0mg"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider7"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/cholesterolTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_below="@id/divider7"
+            android:id="@+id/sodiumTextView"
+            android:text="Sodium"
+            android:textColor="@color/black"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider7"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="110dp"
+            android:id="@+id/sodiumValue"
+            android:text="0mg"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/sodiumTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_below="@id/divider8"
+            android:id="@+id/totalCarbsTextView"
+            android:text="Total Carbohydrate"
+            android:textColor="@color/black"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider8"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="240dp"
+            android:id="@+id/totalCarbsValue"
+            android:text="0g"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider9"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/totalCarbsTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider9"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="35dp"
+            android:id="@+id/dietaryFiberTextView"
+            android:text="Dietary Fiber"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider9"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="150dp"
+            android:id="@+id/dietaryFiberValue"
+            android:text="0g"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider10"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/dietaryFiberTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider10"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="35dp"
+            android:id="@+id/totalSugarsTextView"
+            android:text="Total Sugars"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider10"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="150dp"
+            android:id="@+id/totalSugarsValue"
+            android:text="0g"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+
+        <View
+            android:id="@+id/divider11"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/totalSugarsTextView"
+            android:layout_centerHorizontal="true"
+            android:background="@color/datepicker"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_below="@id/divider11"
+            android:id="@+id/proteinTextView"
+            android:text="Protein"
+            android:textColor="@color/black"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@color/lightOrange"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider11"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="110dp"
+            android:id="@+id/proteinValue"
+            android:text="0g"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:background="@color/lightOrange"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider12"
+        android:layout_width="330dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/dailyValuesLayout"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black"/>
+
+
+</RelativeLayout>

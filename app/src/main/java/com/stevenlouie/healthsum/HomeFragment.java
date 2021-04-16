@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     private FloatingActionButton fab;
     private ScrollView scrollView;
     private CardView breakfastCardView, lunchCardView, dinnerCardView, exerciseCardView;
-    private Button datepicker;
+    private Button datepicker, infoBtn;
     private String date;
     private DatePickerDialog datePickerDialog;
     private int selectedYear;
@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment {
         lunch_calories = view.findViewById(R.id.lunch_calories);
         dinner_details = view.findViewById(R.id.dinner_details);
         dinner_calories = view.findViewById(R.id.dinner_calories);
+        infoBtn = view.findViewById(R.id.infoBtn);
 
         calendar = Calendar.getInstance();
         selectedYear = Integer.valueOf(date.substring(6));
@@ -202,6 +203,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        infoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openInfoDialog();
+            }
+        });
+
         return view;
     }
 
@@ -226,6 +234,11 @@ public class HomeFragment extends Fragment {
         SetGoalsDialog dialog = new SetGoalsDialog();
         dialog.setArguments(bundle);
         dialog.show(getActivity().getSupportFragmentManager(), "Set Goals Dialog");
+    }
+
+    private void openInfoDialog() {
+        InfoDialog dialog = new InfoDialog();
+        dialog.show(getActivity().getSupportFragmentManager(), "Show info dialog");
     }
 
     private void fetchData() {

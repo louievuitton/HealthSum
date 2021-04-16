@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="27dp"
+        android:background="@color/green5">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/ic_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_margin="13dp"
+        android:id="@+id/textView1"
+        android:text="Macronutrients Distribution for a Healthy Diet"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_below="@id/textView1"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/bullet1"
+        android:background="@drawable/ic_bullet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/bullet1"
+        android:layout_below="@id/textView1"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/carbsInfo"
+        android:text="45-65% of calories from carbohydrates"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_below="@id/bullet1"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="17dp"
+        android:id="@+id/bullet2"
+        android:background="@drawable/ic_bullet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/bullet2"
+        android:layout_below="@id/carbsInfo"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/fatInfo"
+        android:text="20-35% of calories from fats"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_below="@id/bullet2"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="17dp"
+        android:id="@+id/bullet3"
+        android:background="@drawable/ic_bullet"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/bullet3"
+        android:layout_below="@id/fatInfo"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/proteinInfo"
+        android:text="10-35% of calories from proteins"
+        android:textSize="16sp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/proteinInfo"
+        android:layout_alignParentEnd="true"
+        android:outlineSpotShadowColor="@color/white"
+        android:outlineAmbientShadowColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/closeBtn"
+        android:text="OK"
+        android:textStyle="bold"
+        android:background="@color/white"/>
+</RelativeLayout>

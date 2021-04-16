@@ -4,26 +4,36 @@ public class Meal {
 
     private int calories;
     private int carbs;
+    private int cholesterol;
+    private int dietaryFiber;
     private int fat;
     private String id;
     private String image;
     private String meal;
     private int protein;
+    private int saturatedFat;
     private int servings;
+    private int sodium;
+    private int sugars;
 
     public Meal() {
 
     }
 
-    public Meal(int calories, int carbs, int fat, String id, String image, String meal, int protein, int servings) {
+    public Meal(int calories, int carbs, int cholesterol, int dietaryFiber, int fat, String id, String image, String meal, int protein, int saturatedFat, int servings, int sodium, int sugars) {
         this.calories = calories;
         this.carbs = carbs;
+        this.cholesterol = cholesterol;
+        this.dietaryFiber = dietaryFiber;
         this.fat = fat;
         this.id = id;
         this.image = image;
         this.meal = meal;
         this.protein = protein;
+        this.saturatedFat = saturatedFat;
         this.servings = servings;
+        this.sodium = sodium;
+        this.sugars = sugars;
     }
 
     public String getId() {
@@ -88,5 +98,45 @@ public class Meal {
 
     public void setFat(int fat) {
         this.fat = fat;
+    }
+
+    public int getCholesterol() {
+        return cholesterol;
+    }
+
+    public void setCholesterol(int cholesterol) {
+        this.cholesterol = cholesterol;
+    }
+
+    public int getDietaryFiber() {
+        return dietaryFiber;
+    }
+
+    public void setDietaryFiber(int dietaryFiber) {
+        this.dietaryFiber = dietaryFiber;
+    }
+
+    public int getSaturatedFat() {
+        return saturatedFat;
+    }
+
+    public void setSaturatedFat(int saturatedFat) {
+        this.saturatedFat = saturatedFat;
+    }
+
+    public int getSodium() {
+        return sodium;
+    }
+
+    public void setSodium(int sodium) {
+        this.sodium = sodium;
+    }
+
+    public int getSugars() {
+        return sugars;
+    }
+
+    public void setSugars(int sugars) {
+        this.sugars = sugars;
     }
 }

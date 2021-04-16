@@ -23,4 +23,9 @@
     <color name="datepicker">#616161</color>
     <color name="scaleBackground">#2B98D3</color>
     <color name="toggleBtn">#12B9D5</color>
+    <color name="black">#000000</color>
+    <color name="bbyBlue">#C0EBFF</color>
+    <color name="lightPink">#F6C3E3</color>
+    <color name="lightPurple">#E5CEFA</color>
+    <color name="lightOrange">#FAE8B4</color>
 </resources>

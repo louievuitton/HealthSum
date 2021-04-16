@@ -8,8 +8,13 @@ public class NutritionModel {
     private int carbs;
     private int protein;
     private String image;
+    private int saturatedFat;
+    private int cholesterol;
+    private int sodium;
+    private int dietaryFiber;
+    private int sugars;
 
-    public NutritionModel(String foodName, int servingQty, int calories, int fat, int carbs, int protein, String image) {
+    public NutritionModel(String foodName, int servingQty, int calories, int fat, int carbs, int protein, String image, int saturatedFat, int cholesterol, int sodium, int dietaryFiber, int sugars) {
         this.foodName = foodName;
         this.servingQty = servingQty;
         this.calories = calories;
@@ -17,6 +22,11 @@ public class NutritionModel {
         this.carbs = carbs;
         this.protein = protein;
         this.image = image;
+        this.saturatedFat = saturatedFat;
+        this.cholesterol = cholesterol;
+        this.sodium = sodium;
+        this.dietaryFiber = dietaryFiber;
+        this.sugars = sugars;
     }
 
     public NutritionModel() {
@@ -79,6 +89,46 @@ public class NutritionModel {
         this.image = image;
     }
 
+    public int getSaturatedFat() {
+        return saturatedFat;
+    }
+
+    public void setSaturatedFat(int saturatedFat) {
+        this.saturatedFat = saturatedFat;
+    }
+
+    public int getCholesterol() {
+        return cholesterol;
+    }
+
+    public void setCholesterol(int cholesterol) {
+        this.cholesterol = cholesterol;
+    }
+
+    public int getSodium() {
+        return sodium;
+    }
+
+    public void setSodium(int sodium) {
+        this.sodium = sodium;
+    }
+
+    public int getDietaryFiber() {
+        return dietaryFiber;
+    }
+
+    public void setDietaryFiber(int dietaryFiber) {
+        this.dietaryFiber = dietaryFiber;
+    }
+
+    public int getSugars() {
+        return sugars;
+    }
+
+    public void setSugars(int sugars) {
+        this.sugars = sugars;
+    }
+
     @Override
     public String toString() {
         return "NutritionModel{" +
@@ -88,6 +138,12 @@ public class NutritionModel {
                 ", fat=" + fat +
                 ", carbs=" + carbs +
                 ", protein=" + protein +
+                ", image='" + image + '\'' +
+                ", saturatedFat=" + saturatedFat +
+                ", cholesterol=" + cholesterol +
+                ", sodium=" + sodium +
+                ", dietaryFiber=" + dietaryFiber +
+                ", sugars=" + sugars +
                 '}';
     }
 }

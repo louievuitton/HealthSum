@@ -227,6 +227,16 @@
                 android:drawableLeft="@drawable/ic_calendar"
                 android:background="@null"/>
 
+            <Button
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@id/statisticsLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="12dp"
+                android:id="@+id/infoBtn"
+                android:background="@drawable/ic_info"/>
+
             <LinearLayout
                 android:id="@+id/activityLayout"
                 android:layout_width="match_parent"

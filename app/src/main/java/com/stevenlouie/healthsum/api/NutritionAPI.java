@@ -74,6 +74,11 @@ public class NutritionAPI {
                         model.setCarbs((int) Math.round(obj.getDouble("nf_total_carbohydrate")));
                         model.setProtein((int) Math.round(obj.getDouble("nf_protein")));
                         model.setImage(obj.getJSONObject("photo").getString("thumb"));
+                        model.setSaturatedFat((int) Math.round(obj.getDouble("nf_saturated_fat")));
+                        model.setCholesterol((int) Math.round(obj.getDouble("nf_cholesterol")));
+                        model.setSodium((int) Math.round(obj.getDouble("nf_sodium")));
+                        model.setDietaryFiber((int) Math.round(obj.getDouble("nf_dietary_fiber")));
+                        model.setSugars((int) Math.round(obj.getDouble("nf_sugars")));
                         models.add(model);
                     }
 
@@ -88,12 +93,22 @@ public class NutritionAPI {
                     map.put("carbs", 0);
                     map.put("protein", 0);
                     map.put("image", models.get(0).getImage());
+                    map.put("saturatedFat", 0);
+                    map.put("cholesterol", 0);
+                    map.put("sodium", 0);
+                    map.put("dietaryFiber", 0);
+                    map.put("sugars", 0);
 
                     for (int i = 0; i < models.size(); i++) {
                         map.put("calories", ((int) map.get("calories")) + models.get(i).getCalories());
                         map.put("fat", ((int) map.get("fat")) + models.get(i).getFat());
                         map.put("carbs", ((int) map.get("carbs")) + models.get(i).getCarbs());
                         map.put("protein", ((int) map.get("protein")) + models.get(i).getProtein());
+                        map.put("saturatedFat", ((int) map.get("saturatedFat")) + models.get(i).getSaturatedFat());
+                        map.put("cholesterol", ((int) map.get("cholesterol")) + models.get(i).getCholesterol());
+                        map.put("sodium", ((int) map.get("sodium")) + models.get(i).getSodium());
+                        map.put("dietaryFiber", ((int) map.get("dietaryFiber")) + models.get(i).getDietaryFiber());
+                        map.put("sugars", ((int) map.get("sugars")) + models.get(i).getSugars());
                     }
 
                     database.addListenerForSingleValueEvent(new ValueEventListener() {
