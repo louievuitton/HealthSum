@@ -36,11 +36,11 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:layout_width="17dp"
-        android:layout_height="17dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_below="@id/textView1"
         android:layout_marginLeft="17dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:id="@+id/bullet1"
         android:background="@drawable/ic_bullet"/>
 
@@ -56,11 +56,11 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:layout_width="17dp"
-        android:layout_height="17dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_below="@id/bullet1"
         android:layout_marginLeft="17dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="25dp"
         android:id="@+id/bullet2"
         android:background="@drawable/ic_bullet"/>
 
@@ -76,11 +76,11 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:layout_width="17dp"
-        android:layout_height="17dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_below="@id/bullet2"
         android:layout_marginLeft="17dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="25dp"
         android:id="@+id/bullet3"
         android:background="@drawable/ic_bullet"/>
 

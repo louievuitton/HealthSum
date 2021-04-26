@@ -20,7 +20,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.stevenlouie.healthsum.api.NutritionAPI;
 
 import java.text.DateFormatSymbols;
@@ -56,9 +59,7 @@ public class SetGoalsDialog extends AppCompatDialogFragment {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-//        stepsEditText = view.findViewById(R.id.stepsEditText);
         caloriesEditText = view.findViewById(R.id.caloriesEditText);
-//        stepsWarning = view.findViewById(R.id.stepsWarning);
         caloriesWarning = view.findViewById(R.id.caloriesWarning);
         setGoalsBtn = view.findViewById(R.id.setGoalsButton);
         cancelBtn = view.findViewById(R.id.cancelBtn);
@@ -67,20 +68,33 @@ public class SetGoalsDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(View v) {
                 if (validateGoals()) {
-//                    stepsWarning.setVisibility(View.INVISIBLE);
                     caloriesWarning.setVisibility(View.INVISIBLE);
 
-                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    imm.hideSoftInputFromWindow(stepsEditText.getWindowToken(), 0);
-                    imm.hideSoftInputFromWindow(caloriesEditText.getWindowToken(), 0);
-
-                    HashMap<String, Object> map = new HashMap<>();
-//                    map.put("setSteps", Integer.valueOf(stepsEditText.getText().toString()));
+                    final HashMap<String, Object> map = new HashMap<>();
                     map.put("caloriesLeft", Integer.valueOf(caloriesEditText.getText().toString()));
                     map.put("calorieGoal", Integer.valueOf(caloriesEditText.getText().toString()));
-                    map.put("caloriesBurned", 0);
 
-                    database.getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
+                    database.getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.hasChild(date)) {
+                                map.put("caloriesBurned", Integer.valueOf(dataSnapshot.child(date).child("caloriesBurned").getValue().toString()));
+                            }
+                            else {
+                                map.put("caloriesBurned", 0);
+                            }
+                            database.getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(caloriesEditText.getWindowToken(), 0);
+
                     Toast.makeText(getActivity(), "Successfully set goals", Toast.LENGTH_SHORT).show();
                     dismiss();
                 }
@@ -90,7 +104,6 @@ public class SetGoalsDialog extends AppCompatDialogFragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Cancel button clicked", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         });
@@ -106,14 +119,6 @@ public class SetGoalsDialog extends AppCompatDialogFragment {
 
     private boolean validateGoals() {
         boolean valid = true;
-//        if (stepsEditText.getText().toString().equals("")) {
-//            stepsWarning.setText("Steps count cannot be empty");
-//            stepsWarning.setVisibility(View.VISIBLE);
-//            valid = false;
-//        }
-//        else {
-//            stepsWarning.setVisibility(View.INVISIBLE);
-//        }
 
         if (caloriesEditText.getText().toString().equals("")) {
             caloriesWarning.setText("Calories count cannot be empty");
@@ -126,13 +131,6 @@ public class SetGoalsDialog extends AppCompatDialogFragment {
 
         if (valid) {
             String regex = "^[0-9]+$";
-//            if (!Pattern.compile(regex).matcher(stepsEditText.getText().toString()).matches() && !stepsEditText.getText().toString().equals("")) {
-//                stepsWarning.setText("Steps count can only be numbers");
-//                stepsWarning.setVisibility(View.VISIBLE);
-//                valid = false;
-//            } else {
-//                stepsWarning.setVisibility(View.INVISIBLE);
-//            }
 
             if (!Pattern.compile(regex).matcher(caloriesEditText.getText().toString()).matches() && !caloriesEditText.getText().toString().equals("")) {
                 caloriesWarning.setText("Calories count can only be numbers");

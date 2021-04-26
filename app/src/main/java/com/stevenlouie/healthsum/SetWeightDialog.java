@@ -81,12 +81,6 @@ public class SetWeightDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        getDialog().getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//    }
-
     private boolean validate() {
         boolean valid = true;
         if (weightEditText.getText().toString().equals("")) {

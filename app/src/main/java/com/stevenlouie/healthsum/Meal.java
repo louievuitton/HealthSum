@@ -15,12 +15,13 @@ public class Meal {
     private int servings;
     private int sodium;
     private int sugars;
+    private String timestamp;
 
     public Meal() {
 
     }
 
-    public Meal(int calories, int carbs, int cholesterol, int dietaryFiber, int fat, String id, String image, String meal, int protein, int saturatedFat, int servings, int sodium, int sugars) {
+    public Meal(int calories, int carbs, int cholesterol, int dietaryFiber, int fat, String id, String image, String meal, int protein, int saturatedFat, int servings, int sodium, int sugars, String timestamp) {
         this.calories = calories;
         this.carbs = carbs;
         this.cholesterol = cholesterol;
@@ -34,6 +35,7 @@ public class Meal {
         this.servings = servings;
         this.sodium = sodium;
         this.sugars = sugars;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -138,5 +140,13 @@ public class Meal {
 
     public void setSugars(int sugars) {
         this.sugars = sugars;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

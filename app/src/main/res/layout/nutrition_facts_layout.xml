@@ -14,12 +14,23 @@
         android:textAllCaps="false"
         android:textStyle="bold"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nutritionFactsTextView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/mealNameTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textAllCaps="false"/>
+
     <View
         android:id="@+id/divider2"
         android:layout_width="370dp"
         android:layout_height="2dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/nutritionFactsTextView"
+        android:layout_below="@id/mealNameTextView"
         android:background="@color/datepicker"/>
 
     <RelativeLayout
@@ -410,5 +421,15 @@
         android:layout_centerHorizontal="true"
         android:background="@color/black"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider12"
+        android:layout_margin="15dp"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/red"
+        android:src="@drawable/ic_close"
+        android:stateListAnimator="@null"/>
 
 </RelativeLayout>

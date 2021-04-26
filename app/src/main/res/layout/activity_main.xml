@@ -12,6 +12,90 @@
         android:id="@+id/fragmentContainer"
         android:layout_above="@id/bottomNavigationView"/>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/infoLayout"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:translationZ="90dp">
+
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/info"
+            android:text="Click here to set your weight"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="17dp"
+            android:elevation="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/rlv1"
+            android:layout_width="130dp"
+            android:layout_height="65dp"
+            android:background="@drawable/rectangle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="17dp"
+            android:elevation="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/rlv2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/rlv1"
+            android:background="@drawable/triangle"
+            android:elevation="10dp"
+            android:rotation="180"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="38dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/infoLayout2"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:translationZ="90dp">
+
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/info2"
+            android:text="Click here to set your calorie goal"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="17dp"
+            android:elevation="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/rlv3"
+            android:layout_width="130dp"
+            android:layout_height="65dp"
+            android:background="@drawable/rectangle"
+            android:layout_marginLeft="17dp"
+            android:elevation="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/rlv4"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/rlv3"
+            android:background="@drawable/triangle"
+            android:elevation="10dp"
+            android:rotation="180"
+            android:layout_marginLeft="38dp"/>
+
+    </RelativeLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"

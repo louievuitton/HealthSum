@@ -47,6 +47,7 @@ public class ExerciseRecViewAdapter extends RecyclerView.Adapter<ExerciseRecView
 //                Toast.makeText(context, meals.get(position).getMeal() + " Selected", Toast.LENGTH_SHORT).show();
             }
         });
+        holder.timestamp.setText("Burned at: " + exercises.get(position).getTimestamp());
 
         Glide.with(context)
                 .load("https://static.thenounproject.com/png/118627-200.png")
@@ -73,7 +74,7 @@ public class ExerciseRecViewAdapter extends RecyclerView.Adapter<ExerciseRecView
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView parent;
-        private TextView exerciseName, caloriesBurned;
+        private TextView exerciseName, caloriesBurned, timestamp;
 //        private Button deleteBtn;
         private ImageView itemImage;
         public ViewHolder(@NonNull View itemView) {
@@ -82,6 +83,7 @@ public class ExerciseRecViewAdapter extends RecyclerView.Adapter<ExerciseRecView
             exerciseName = itemView.findViewById(R.id.exerciseName);
             caloriesBurned = itemView.findViewById(R.id.caloriesBurned);
             itemImage = itemView.findViewById(R.id.itemImage);
+            timestamp = itemView.findViewById(R.id.timestamp);
 //            deleteBtn = itemView.findViewById(R.id.deleteBtn);
         }
     }

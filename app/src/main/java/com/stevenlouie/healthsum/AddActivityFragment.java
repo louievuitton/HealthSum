@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,12 +33,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.stevenlouie.healthsum.api.NutritionAPI;
 
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddActivityFragment extends Fragment {
 
-    private RelativeLayout addMealLayout, addExerciseLayout;
+    private RelativeLayout addMealLayout, addExerciseLayout, parent;
     private TextView foodWarning, exerciseWarning;
     private EditText mealEditText, exerciseEditText;
     private Button addBtn, datepicker;
@@ -51,10 +55,10 @@ public class AddActivityFragment extends Fragment {
     private int selectedMonth;
     private int selectedDayOfMonth;
     private Calendar calendar;
-    private String parentActivity;
     private FirebaseAuth auth;
     private DatabaseReference database;
     private boolean flag;
+    private Snackbar snackbar;
 
     public AddActivityFragment() {
         // Required empty public constructor
@@ -74,6 +78,7 @@ public class AddActivityFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid());
 
+        parent = view.findViewById(R.id.parent);
         addMealLayout = view.findViewById(R.id.addMealLayout);
         addExerciseLayout = view.findViewById(R.id.addExerciseLayout);
         exerciseWarning = view.findViewById(R.id.exerciseWarning);
@@ -115,6 +120,8 @@ public class AddActivityFragment extends Fragment {
                 datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        ((MainActivity) getActivity()).hideInfoLayout();
+                        ((MainActivity) getActivity()).hideInfoLayout2();
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -216,24 +223,47 @@ public class AddActivityFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.hasChild(date)) {
-                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                String hour = calendar.getTime().toString().substring(11, 13);
+                                String minutes = calendar.getTime().toString().substring(14, 16);
+
+                                Date time = null;
+                                try {
+                                    time = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.valueOf(hour+minutes+"")));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
                                 NutritionAPI api = new NutritionAPI(getActivity());
                                 if (selectedActivity.equals("meal")) {
-                                    api.fetchNutritionData(date, mealType, mealEditText.getText().toString(), numServings);
+                                    api.fetchNutritionData(date, sdf.format(time), mealType, mealEditText.getText().toString(), numServings);
                                     mealEditText.getText().clear();
                                     mealEditText.clearFocus();
-                                    imm.hideSoftInputFromWindow(mealEditText.getWindowToken(), 0);
                                 } else if (selectedActivity.equals("exercise")) {
-                                    api.fetchExerciseData(date, exerciseEditText.getText().toString());
+                                    api.fetchExerciseData(date, sdf.format(time), exerciseEditText.getText().toString());
                                     exerciseEditText.getText().clear();
                                     exerciseEditText.clearFocus();
-                                    imm.hideSoftInputFromWindow(exerciseEditText.getWindowToken(), 0);
                                 }
-
-                                Toast.makeText(getActivity(), "Successfully added activity", Toast.LENGTH_SHORT).show();
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mealEditText.getWindowToken(), 0);
+                                imm.hideSoftInputFromWindow(exerciseEditText.getWindowToken(), 0);
+//                                Toast.makeText(getActivity(), "Successfully added activity", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Toast.makeText(getActivity(), "Please set your calorie goal before adding an activity", Toast.LENGTH_SHORT).show();
+                                snackbar = Snackbar.make(parent, "Please set your calorie goal before adding an activity", BaseTransientBottomBar.LENGTH_LONG)
+                                        .setAction("Dismiss", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                snackbar.dismiss();
+                                            }
+                                        });
+                                snackbar.addCallback(new Snackbar.Callback() {
+                                    public void onDismissed (Snackbar snackbar,int event){
+                                        if (event == Snackbar.Callback.DISMISS_EVENT_ACTION || event == DISMISS_EVENT_TIMEOUT) {
+                                            ((MainActivity) getActivity()).showInfoLayout2();
+                                        }
+                                    }
+                                });
+                                snackbar.show();
                             }
                         }
 

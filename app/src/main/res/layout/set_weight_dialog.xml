@@ -44,14 +44,29 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/weightWarning"
-            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="41dp"
             android:layout_marginBottom="30dp"
             android:id="@+id/weightEditText"
             android:hint="0"
             android:gravity="right"
             android:textSize="50sp"
+            android:textStyle="bold"
             android:background="@color/scaleBackground"
             android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weightWarning"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/weightEditText"
+            android:layout_marginRight="80dp"
+            android:paddingTop="30dp"
+            android:text="lb"
+            android:textSize="30sp"
+            android:background="@color/scaleBackground"/>
 
         <Button
             android:layout_width="250dp"

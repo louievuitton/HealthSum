@@ -55,6 +55,17 @@
             android:text="150 calories"
             android:textSize="16sp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/numCalories"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/timestamp"
+            android:text="Consumed at: 10:35 PM"
+            android:textSize="13sp"/>
+
 <!--        <Button-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->

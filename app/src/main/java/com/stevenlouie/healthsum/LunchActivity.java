@@ -34,11 +34,12 @@ import java.util.Calendar;
 public class LunchActivity extends AppCompatActivity {
 
     private LinearLayout fab_full;
-    private TextView caloriesConsumed, listTextView, proteinConsumed, carbsConsumed, fatConsumed;
+    private TextView caloriesConsumed, listTextView, proteinConsumed, carbsConsumed, fatConsumed, fab_text;
     private RecyclerView lunchRecView;
     private MealRecViewAdapter adapter;
     private FirebaseAuth auth;
     private String date;
+    private AddActivityDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class LunchActivity extends AppCompatActivity {
         adapter = new MealRecViewAdapter(this);
         lunchRecView = findViewById(R.id.lunchRecView);
         fab_full = findViewById(R.id.fab_full);
+        fab_text = findViewById(R.id.fab_text);
         proteinConsumed = findViewById(R.id.proteinConsumed);
         carbsConsumed = findViewById(R.id.carbsConsumed);
         fatConsumed = findViewById(R.id.fatConsumed);
@@ -65,16 +67,36 @@ public class LunchActivity extends AppCompatActivity {
                 openDialog();
             }
         });
+        handleFab();
 
         fetchData();
+    }
+
+    private void handleFab() {
+        lunchRecView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > oldScrollY) {
+                    fab_text.setVisibility(View.GONE);
+                } else if (scrollX == scrollY) {
+                    fab_text.setVisibility(View.VISIBLE);
+                } else {
+                    fab_text.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void openDialog() {
         Bundle bundle = new Bundle();
         bundle.putString("date", date);
-        AddActivityDialog dialog = new AddActivityDialog("lunch");
+        dialog = new AddActivityDialog("lunch");
         dialog.setArguments(bundle);
         dialog.show(LunchActivity.this.getSupportFragmentManager(), "Add Lunch Dialog");
+    }
+
+    public void dismissDialog() {
+        dialog.dismiss();
     }
 
     private void fetchData() {

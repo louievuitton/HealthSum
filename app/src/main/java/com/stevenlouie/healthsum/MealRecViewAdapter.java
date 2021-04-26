@@ -70,6 +70,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
                 dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Show nutritional facts dialog");
             }
         });
+        holder.timestamp.setText("Consumed at: " + meals.get(position).getTimestamp());
 
         Glide.with(context)
                 .load(meals.get(position).getImage())
@@ -212,7 +213,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView parent;
-        private TextView mealName, numServings, numCalories;
+        private TextView mealName, numServings, numCalories, timestamp;
         private ImageView itemImage;
 //        private Button deleteBtn;
         public ViewHolder(@NonNull View itemView) {
@@ -222,6 +223,7 @@ public class MealRecViewAdapter extends RecyclerView.Adapter<MealRecViewAdapter.
             numServings = itemView.findViewById(R.id.numServings);
             numCalories = itemView.findViewById(R.id.numCalories);
             itemImage = itemView.findViewById(R.id.itemImage);
+            timestamp = itemView.findViewById(R.id.timestamp);
 //            deleteBtn = itemView.findViewById(R.id.deleteBtn);
         }
     }

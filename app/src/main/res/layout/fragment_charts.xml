@@ -55,7 +55,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/datepicker"
                 android:id="@+id/weightTimestamp"
-                android:text="Last weighed: 06:24 AM"
                 android:layout_centerHorizontal="true"
                 android:visibility="gone"/>
 
@@ -95,7 +94,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/round_button"
             android:backgroundTint="@color/white"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,7 +102,7 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginLeft="8dp"
                 android:id="@+id/chartTextView"
-                android:text="WEIGHT"
+                android:text="WEIGHT OVERVIEW"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -130,11 +129,19 @@
                 android:background="@color/cancelBtn"/>
 
             <com.github.mikephil.charting.charts.LineChart
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="340dp"
+                android:layout_height="400dp"
                 android:id="@+id/lineChart"
                 android:layout_below="@+id/chartTextView"
                 android:layout_marginTop="30dp"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_width="340dp"
+                android:layout_height="400dp"
+                android:id="@+id/lineChart2"
+                android:layout_below="@+id/chartTextView"
+                android:layout_marginTop="30dp"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

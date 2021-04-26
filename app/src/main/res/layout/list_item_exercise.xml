@@ -31,7 +31,7 @@
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@id/itemImage"
             android:text="ran 3 miles"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_below="@id/divider"/>
 
@@ -43,7 +43,18 @@
             android:layout_marginLeft="15dp"
             android:id="@+id/caloriesBurned"
             android:text="355 calories burned"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/caloriesBurned"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/timestamp"
+            android:text="Burned at: 10:35 PM"
+            android:textSize="13sp" />
 
 <!--        <Button-->
 <!--            android:layout_width="wrap_content"-->

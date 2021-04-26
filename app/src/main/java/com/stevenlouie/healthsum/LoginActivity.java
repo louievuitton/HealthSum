@@ -69,19 +69,18 @@ public class LoginActivity extends AppCompatActivity {
                     calendar = Calendar.getInstance();
                     SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
                     final String date = timeStamp.format(calendar.getTime());
-                    auth.signInWithEmailAndPassword("barney@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
+                    auth.signInWithEmailAndPassword("stevenlouie@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.hasChild("2021-03-05")) {
+                                    if (!dataSnapshot.hasChild(date)) {
                                         HashMap<String, Object> map = new HashMap<>();
                                         map.put("caloriesLeft", 0);
-//                                        map.put("setSteps", 0);
                                         map.put("caloriesBurned", 0);
                                         map.put("calorieGoal", 0);
-                                        FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("2021-03-05").updateChildren(map);
+                                        FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
                                     }
                                 }
 
@@ -92,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                             });
                             Toast.makeText(LoginActivity.this, "Successfully logged in.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("date", "2021-03-05");
+                            intent.putExtra("date", date);
                             startActivity(intent);
                             finish();
                         }
@@ -102,8 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                             invalidLoginWarning.setVisibility(View.VISIBLE);
                         }
                     });
-//                }
-            }
+                }
+//            }
         });
     }
 
@@ -128,18 +127,23 @@ public class LoginActivity extends AppCompatActivity {
             emailWarning.setVisibility(View.VISIBLE);
             valid = false;
         }
+        else {
+            emailWarning.setVisibility(View.INVISIBLE);
+        }
 
-//        String passwordRegex = "^[a-zA-Z0-9]{8,}$";
-//        if (!Pattern.compile(passwordRegex).matcher(editPassword.getText().toString()).matches()) {
-//            passwordWarning.setText("Password cannot contain special characters and must have at least 8 characters");
-//            passwordWarning.setVisibility(View.VISIBLE);
-//            valid = false;
-//        }
+        String passwordRegex = "^[a-zA-Z0-9]{8,}$";
+        if (!Pattern.compile(passwordRegex).matcher(editPassword.getText().toString()).matches()) {
+            passwordWarning.setText("Password cannot contain special characters and must have at least 8 characters");
+            passwordWarning.setVisibility(View.VISIBLE);
+            valid = false;
+        }
+        else {
+            passwordWarning.setVisibility(View.INVISIBLE);
+        }
 
         if (!valid) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }

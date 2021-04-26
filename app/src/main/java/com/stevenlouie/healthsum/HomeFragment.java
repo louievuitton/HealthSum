@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment {
     private Calendar calendar;
     private FirebaseAuth auth;
     private DatabaseReference database;
-    private String parentActivity;
     private boolean goalsSet = false;
     private int totalCalories = 0;
 
@@ -234,7 +233,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void openInfoDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("set", goalsSet);
+        bundle.putString("date", date);
         InfoDialog dialog = new InfoDialog();
+        dialog.setArguments(bundle);
         dialog.show(getActivity().getSupportFragmentManager(), "Show info dialog");
     }
 
@@ -259,6 +262,7 @@ public class HomeFragment extends Fragment {
                                 activityLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
                                 fab_full.setVisibility(View.VISIBLE);
+
                                 totalCalories = Integer.valueOf(dataSnapshot.child("calorieGoal").getValue().toString());
                                 totalCaloriesLeft.setText(dataSnapshot.child("caloriesLeft").getValue().toString());
                                 totalCaloriesBurned.setText(dataSnapshot.child("caloriesBurned").getValue().toString());
@@ -392,10 +396,5 @@ public class HomeFragment extends Fragment {
 
             }
         });
-    }
-
-    private void updateProgressBar() {
-        caloriesProgressBar.setMax(totalCalories);
-        caloriesProgressBar.setProgress(Integer.valueOf(totalCaloriesLeft.getText().toString()));
     }
 }

@@ -39,6 +39,7 @@ public class ExerciseActivity extends AppCompatActivity {
     private ExerciseRecViewAdapter adapter;
     private FirebaseAuth auth;
     private String date;
+    private AddActivityDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +71,13 @@ public class ExerciseActivity extends AppCompatActivity {
     private void openDialog() {
         Bundle bundle = new Bundle();
         bundle.putString("date", date);
-        AddActivityDialog dialog = new AddActivityDialog("exercise");
+        dialog = new AddActivityDialog("exercise");
         dialog.setArguments(bundle);
         dialog.show(ExerciseActivity.this.getSupportFragmentManager(), "Add Exercise Dialog");
+    }
+
+    public void dismissDialog() {
+        dialog.dismiss();
     }
 
     private void fetchData() {

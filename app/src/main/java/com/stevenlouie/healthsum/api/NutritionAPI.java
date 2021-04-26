@@ -18,6 +18,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.stevenlouie.healthsum.BreakfastActivity;
+import com.stevenlouie.healthsum.DinnerActivity;
+import com.stevenlouie.healthsum.ExerciseActivity;
+import com.stevenlouie.healthsum.LunchActivity;
+import com.stevenlouie.healthsum.MainActivity;
 import com.stevenlouie.healthsum.models.ExerciseModel;
 import com.stevenlouie.healthsum.models.NutritionModel;
 
@@ -46,7 +51,7 @@ public class NutritionAPI {
         this.context = context;
     }
 
-    public void fetchNutritionData(final String date, final String mealType, final String foodName, final int numServings) {
+    public void fetchNutritionData(final String date, final String time, final String mealType, final String foodName, final int numServings) {
         String url = "https://trackapi.nutritionix.com/v2/natural/nutrients";
         JSONObject obj = new JSONObject();
         try {
@@ -88,6 +93,7 @@ public class NutritionAPI {
                     map.put("id", key);
                     map.put("meal", foodName);
                     map.put("servings", numServings);
+                    map.put("timestamp", time);
                     map.put("calories", 0);
                     map.put("fat", 0);
                     map.put("carbs", 0);
@@ -115,7 +121,12 @@ public class NutritionAPI {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             int caloriesLeft = Integer.valueOf(dataSnapshot.child("caloriesLeft").getValue().toString());
-                            database.child("caloriesLeft").setValue(caloriesLeft-((int)map.get("calories")));
+                            if (caloriesLeft-((int) map.get("calories")) <= 0) {
+                                database.child("caloriesLeft").setValue(0);
+                            }
+                            else {
+                                database.child("caloriesLeft").setValue(caloriesLeft - ((int) map.get("calories")));
+                            }
                             if (dataSnapshot.hasChild("totalCalories")) {
                                 if (dataSnapshot.child("totalCalories").hasChild(mealType)) {
                                     totalCalories = Integer.valueOf(dataSnapshot.child("totalCalories").child(mealType).getValue().toString());
@@ -138,6 +149,16 @@ public class NutritionAPI {
                             database.child("totalFat").child(mealType).setValue(totalFat+((int) map.get("fat")));
                             database.child("totalProtein").child(mealType).setValue(totalProtein+((int) map.get("protein")));
                             database.child(mealType).child(key).updateChildren(map);
+                            Toast.makeText(context, "Successfully added activity", Toast.LENGTH_SHORT).show();
+                            if (context instanceof BreakfastActivity) {
+                                ((BreakfastActivity) context).dismissDialog();
+                            }
+                            if (context instanceof LunchActivity) {
+                                ((LunchActivity) context).dismissDialog();
+                            }
+                            if (context instanceof DinnerActivity) {
+                                ((DinnerActivity) context).dismissDialog();
+                            }
                         }
 
                         @Override
@@ -169,7 +190,7 @@ public class NutritionAPI {
         queue.add(request);
     }
 
-    public void fetchExerciseData(final String date, final String exercise) {
+    public void fetchExerciseData(final String date, final String time, final String exercise) {
         // fetch user information
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -179,25 +200,48 @@ public class NutritionAPI {
                 age = Integer.valueOf(dataSnapshot.child("age").getValue().toString());
                 height = dataSnapshot.child("height").getValue().toString();
 
-//                double wt = weight*(0.453592);
-                final double ht = (Double.valueOf(height.substring(0,1))*(30.48)) + (Double.valueOf(height.substring(2))*(2.54));
-
-                final ArrayList<Integer> wt = new ArrayList<>();
-                db.child("weight").child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+                db.child("weight").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                            wt.add(Integer.valueOf(snapshot.child("weight").getValue().toString()));
+                        if (dataSnapshot.hasChild(date)) {
+                            final double ht = (Double.valueOf(height.substring(0,1))*(30.48)) + (Double.valueOf(height.substring(2))*(2.54));
+                            final ArrayList<Integer> wt = new ArrayList<>();
+                            for (DataSnapshot snapshot: dataSnapshot.child(date).getChildren()) {
+                                wt.add(Integer.valueOf(snapshot.child("weight").getValue().toString()));
+                            }
+                            addExercise(date, time, exercise, gender, age, Math.round(wt.get(wt.size()-1)*(0.453592)), Math.round(ht));
                         }
-                        addExercise(date, exercise, gender, age, Math.round(wt.get(wt.size()-1)*(0.453592)), Math.round(ht));
+                        else {
+                            Toast.makeText(context, "Please set your weight before logging an exercise", Toast.LENGTH_LONG).show();
+                            if (context instanceof MainActivity) {
+                                ((MainActivity) context).showInfoLayout();
+                            }
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
-
                 });
+//                final double ht = (Double.valueOf(height.substring(0,1))*(30.48)) + (Double.valueOf(height.substring(2))*(2.54));
+
+//                final ArrayList<Integer> wt = new ArrayList<>();
+//                db.child("weight").child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+//                            wt.add(Integer.valueOf(snapshot.child("weight").getValue().toString()));
+//                        }
+//                        addExercise(date, exercise, gender, age, Math.round(wt.get(wt.size()-1)*(0.453592)), Math.round(ht));
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//
+//                });
             }
 
             @Override
@@ -207,7 +251,7 @@ public class NutritionAPI {
         });
     }
 
-    private void addExercise(final String date, final String exercise, String g, int a, double w, double h) {
+    private void addExercise(final String date, final String time, final String exercise, String g, int a, double w, double h) {
         String url = "https://trackapi.nutritionix.com/v2/natural/exercise";
         JSONObject obj = new JSONObject();
         try {
@@ -243,6 +287,7 @@ public class NutritionAPI {
                     map.put("exercise", exercise);
                     map.put("caloriesBurned", 0);
                     map.put("image", models.get(0).getImage());
+                    map.put("timestamp", time);
 
                     for (int i = 0; i < models.size(); i++) {
                         map.put("caloriesBurned", ((int) map.get("caloriesBurned")) + models.get(i).getCaloriesBurned());
@@ -256,6 +301,10 @@ public class NutritionAPI {
                             int caloriesBurned = Integer.valueOf(dataSnapshot.child("caloriesBurned").getValue().toString());
                             database.child("caloriesBurned").setValue(caloriesBurned + totalCaloriesBurned);
                             database.child("exercises").child(key).updateChildren(map);
+                            Toast.makeText(context, "Successfully added activity", Toast.LENGTH_SHORT).show();
+                            if (context instanceof ExerciseActivity) {
+                                ((ExerciseActivity) context).dismissDialog();
+                            }
                         }
 
                         @Override

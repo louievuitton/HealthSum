@@ -26,6 +26,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -39,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
     private int heightFt = 1;
     private int heightIn = 0;
     private String gender = "male";
-
+    private Calendar calendar;
     private FirebaseAuth auth;
 
     @Override
@@ -169,23 +173,41 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(SignupActivity.this, "Successfully signed up.", Toast.LENGTH_SHORT).show();
+                                calendar = Calendar.getInstance();
+                                SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
+                                final String date = timeStamp.format(calendar.getTime());
+
+                                String hour = calendar.getTime().toString().substring(11, 13);
+                                String minutes = calendar.getTime().toString().substring(14, 16);
+
+                                Date time = null;
+                                try {
+                                    time = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.valueOf(hour+minutes+"")));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+
                                 HashMap<String, Object> map1 = new HashMap<>();
                                 map1.put("gender", gender);
                                 map1.put("age", Integer.valueOf(editAge.getText().toString()));
-//                                map1.put("weight", Integer.valueOf(editWeight.getText().toString()));
                                 map1.put("height", heightFt + "," + heightIn);
                                 DatabaseReference database =  FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
                                 database.updateChildren(map1);
-                                database.child("weight").child("2021-03-05").child(database.push().getKey()).setValue(Integer.valueOf(editWeight.getText().toString()));
+
+                                HashMap<String, Object> map2 = new HashMap<>();
+                                map2.put("weight", Integer.valueOf(editWeight.getText().toString()));
+                                map2.put("timestamp", sdf.format(time));
+                                database.child("weight").child(date).child(database.push().getKey()).updateChildren(map2);
+
                                 HashMap<String, Object> map = new HashMap<>();
                                 map.put("caloriesLeft", 0);
-//                                map.put("setSteps", 0);
                                 map.put("caloriesBurned", 0);
                                 map.put("calorieGoal", 0);
-                                FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child("2021-03-05").updateChildren(map);
+                                FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
+                                Toast.makeText(SignupActivity.this, "Successfully signed up.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                intent.putExtra("date", "2021-03-05");
+                                intent.putExtra("date", date);
                                 startActivity(intent);
                                 finish();
                             }
@@ -247,12 +269,18 @@ public class SignupActivity extends AppCompatActivity {
             emailWarning.setVisibility(View.VISIBLE);
             valid = false;
         }
+        else {
+            emailWarning.setVisibility(View.INVISIBLE);
+        }
 
         String passwordRegex = "^[a-zA-Z0-9]{8,}$";
         if (!Pattern.compile(passwordRegex).matcher(editPassword.getText().toString()).matches()) {
             passwordWarning.setText("Password cannot contain special characters and must have at least 8 characters");
             passwordWarning.setVisibility(View.VISIBLE);
             valid = false;
+        }
+        else {
+            passwordWarning.setVisibility(View.INVISIBLE);
         }
 
         if (!valid) {

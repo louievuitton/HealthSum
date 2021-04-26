@@ -32,6 +32,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.stevenlouie.healthsum.api.NutritionAPI;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class AddActivityDialog extends AppCompatDialogFragment {
@@ -45,6 +49,10 @@ public class AddActivityDialog extends AppCompatDialogFragment {
     private String date;
     private int numServings = 1;
     private String type;
+    private int selectedYear;
+    private int selectedMonth;
+    private int selectedDayOfMonth;
+    private Calendar calendar;
 
     public AddActivityDialog(String type) {
         this.type = type;
@@ -73,6 +81,14 @@ public class AddActivityDialog extends AppCompatDialogFragment {
         addBtn = view.findViewById(R.id.addActivityBtn);
         cancelBtn = view.findViewById(R.id.cancelBtn);
         num_servings_spinner = view.findViewById(R.id.num_servings_spinner);
+
+        calendar = Calendar.getInstance();
+        selectedYear = Integer.valueOf(date.substring(0, 4));
+        selectedMonth = Integer.valueOf(date.substring(5, 7)) - 1;
+        selectedDayOfMonth = Integer.valueOf(date.substring(8));
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+        calendar.set(Calendar.DAY_OF_MONTH, selectedDayOfMonth);
 
         if (type.equals("exercise")) {
             addMealLayout.setVisibility(View.GONE);
@@ -106,29 +122,38 @@ public class AddActivityDialog extends AppCompatDialogFragment {
                 if (validateInput()) {
                     foodWarning.setVisibility(View.GONE);
                     exerciseWarning.setVisibility(View.GONE);
+
+                    String hour = calendar.getTime().toString().substring(11, 13);
+                    String minutes = calendar.getTime().toString().substring(14, 16);
+
+                    Date time = null;
+                    try {
+                        time = new SimpleDateFormat("hhmm").parse(String.format("%04d", Integer.valueOf(hour+minutes+"")));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
                     NutritionAPI api = new NutritionAPI(getActivity());
                     if (type.equals("exercise")) {
-                        api.fetchExerciseData(date, exerciseEditText.getText().toString());
+                        api.fetchExerciseData(date, sdf.format(time), exerciseEditText.getText().toString());
                         exerciseEditText.getText().clear();
                         exerciseEditText.clearFocus();
                     }
                     else if (type.equals("breakfast")) {
-                        api.fetchNutritionData(date, "breakfast", mealEditText.getText().toString(), numServings);
+                        api.fetchNutritionData(date, sdf.format(time), "breakfast", mealEditText.getText().toString(), numServings);
                         mealEditText.getText().clear();
                         mealEditText.clearFocus();
                     }
                     else if (type.equals("lunch")) {
-                        api.fetchNutritionData(date, "lunch", mealEditText.getText().toString(), numServings);
+                        api.fetchNutritionData(date, sdf.format(time), "lunch", mealEditText.getText().toString(), numServings);
                         mealEditText.getText().clear();
                         mealEditText.clearFocus();
                     }
                     else if (type.equals("dinner")) {
-                        api.fetchNutritionData(date, "dinner", mealEditText.getText().toString(), numServings);
+                        api.fetchNutritionData(date, sdf.format(time), "dinner", mealEditText.getText().toString(), numServings);
                         mealEditText.getText().clear();
                         mealEditText.clearFocus();
                     }
-                    Toast.makeText(getActivity(), "Successfully added activity", Toast.LENGTH_SHORT).show();
-                    dismiss();
                 }
             }
         });
@@ -136,7 +161,6 @@ public class AddActivityDialog extends AppCompatDialogFragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Cancel button clicked", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         });

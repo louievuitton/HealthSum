@@ -6,12 +6,14 @@ public class Exercise {
     private String exercise;
     private String id;
     private String image;
+    private String timestamp;
 
-    public Exercise(int caloriesBurned, String exercise, String id, String image) {
+    public Exercise(int caloriesBurned, String exercise, String id, String image, String timestamp) {
         this.caloriesBurned = caloriesBurned;
         this.exercise = exercise;
         this.id = id;
         this.image = image;
+        this.timestamp = timestamp;
     }
 
     public Exercise() {}
@@ -46,5 +48,13 @@ public class Exercise {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }
