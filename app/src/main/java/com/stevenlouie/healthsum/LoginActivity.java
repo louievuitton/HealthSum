@@ -62,14 +62,14 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (validateData()) {
+                if (validateData()) {
                     emailWarning.setVisibility(View.INVISIBLE);
                     passwordWarning.setVisibility(View.INVISIBLE);
 
                     calendar = Calendar.getInstance();
                     SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy-MM-dd");
                     final String date = timeStamp.format(calendar.getTime());
-                    auth.signInWithEmailAndPassword("stevenlouie@gmail.com", "12345678").addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
+                    auth.signInWithEmailAndPassword(editEmail.getText().toString(), editPassword.getText().toString()).addOnSuccessListener(LoginActivity.this, new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             FirebaseDatabase.getInstance().getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-//            }
+            }
         });
     }
 

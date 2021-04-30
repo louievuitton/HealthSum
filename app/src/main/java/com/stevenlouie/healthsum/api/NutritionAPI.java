@@ -224,24 +224,6 @@ public class NutritionAPI {
 
                     }
                 });
-//                final double ht = (Double.valueOf(height.substring(0,1))*(30.48)) + (Double.valueOf(height.substring(2))*(2.54));
-
-//                final ArrayList<Integer> wt = new ArrayList<>();
-//                db.child("weight").child(date).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-//                            wt.add(Integer.valueOf(snapshot.child("weight").getValue().toString()));
-//                        }
-//                        addExercise(date, exercise, gender, age, Math.round(wt.get(wt.size()-1)*(0.453592)), Math.round(ht));
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//
-//                });
             }
 
             @Override

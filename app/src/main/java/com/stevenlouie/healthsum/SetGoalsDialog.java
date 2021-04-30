@@ -34,13 +34,12 @@ import java.util.regex.Pattern;
 
 public class SetGoalsDialog extends AppCompatDialogFragment {
 
-    private TextView stepsWarning, caloriesWarning;
-    private EditText stepsEditText, caloriesEditText;
+    private TextView caloriesWarning;
+    private EditText caloriesEditText;
     private Button setGoalsBtn, cancelBtn;
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private String date;
-    private String parentActivity;
 
     @NonNull
     @Override
@@ -71,16 +70,23 @@ public class SetGoalsDialog extends AppCompatDialogFragment {
                     caloriesWarning.setVisibility(View.INVISIBLE);
 
                     final HashMap<String, Object> map = new HashMap<>();
-                    map.put("caloriesLeft", Integer.valueOf(caloriesEditText.getText().toString()));
                     map.put("calorieGoal", Integer.valueOf(caloriesEditText.getText().toString()));
 
                     database.getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.hasChild(date)) {
+                                int caloriesConsumed = Integer.valueOf(dataSnapshot.child(date).child("calorieGoal").getValue().toString()) - Integer.valueOf(dataSnapshot.child(date).child("caloriesLeft").getValue().toString());
+                                if (Integer.valueOf(caloriesEditText.getText().toString()) - caloriesConsumed < 0) {
+                                    map.put("caloriesLeft", 0);
+                                }
+                                else {
+                                    map.put("caloriesLeft", Integer.valueOf(caloriesEditText.getText().toString()) - caloriesConsumed);
+                                }
                                 map.put("caloriesBurned", Integer.valueOf(dataSnapshot.child(date).child("caloriesBurned").getValue().toString()));
                             }
                             else {
+                                map.put("caloriesLeft", Integer.valueOf(caloriesEditText.getText().toString()));
                                 map.put("caloriesBurned", 0);
                             }
                             database.getReference().child("DailyActivity").child(auth.getCurrentUser().getUid()).child(date).updateChildren(map);
